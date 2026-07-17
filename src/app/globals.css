@@ -1,25 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #060913; /* Deep Dark Navy / Near Black */
-  --color-foreground: #f8fafc;
+  --color-background: #351615;
+  --color-foreground: #D8CBC4;
   
-  /* Primary Accent 1 (Cyan) */
-  --color-cyan-DEFAULT: #00f0ff;
-  --color-cyan-glow: rgba(0, 240, 255, 0.5);
+  --color-coral-DEFAULT: #EE4C64;
+  --color-coral-glow: rgba(238, 76, 100, 0.5);
 
-  /* Primary Accent 2 (Magenta) */
-  --color-magenta-DEFAULT: #ff003c;
-  --color-magenta-glow: rgba(255, 0, 60, 0.5);
+  --color-teal-DEFAULT: #9ACBCB;
+  --color-teal-glow: rgba(154, 203, 203, 0.5);
 
-  /* Neutral/Secondary Accent (Beige/Tan from shirt) */
-  --color-beige-DEFAULT: #d9c8b3;
-  --color-beige-muted: #8b7a66;
+  --color-highlight: #D6815F;
+  --color-heading: #F3E9E2;
+  --color-muted: #B89E95;
 
-  /* UI Colors */
-  --color-surface: #0a0f24;
-  --color-surface-hover: #11182d;
-  --color-border: #1e293b;
+  --color-surface: #412A33;
+  --color-surface-hover: #6D392E;
+  --color-border: #7A5246;
   
   --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
@@ -33,8 +30,8 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     background-image: 
-      radial-gradient(circle at 15% 50%, rgba(255, 0, 60, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.05) 0%, transparent 50%);
+      radial-gradient(circle at 15% 50%, rgba(238, 76, 100, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 85% 30%, rgba(154, 203, 203, 0.05) 0%, transparent 50%);
     background-attachment: fixed;
   }
 }
@@ -42,12 +39,12 @@
 /* Custom utility for glassmorphism */
 @layer utilities {
   .glass {
-    @apply bg-surface/60 backdrop-blur-md border border-border/50;
+    @apply bg-surface/80 backdrop-blur-md border border-border/50;
   }
-  .neon-glow-cyan {
-    box-shadow: 0 0 15px var(--color-cyan-glow), 0 0 30px var(--color-cyan-glow);
+  .glow-coral {
+    box-shadow: 0 0 15px var(--color-coral-glow), 0 0 30px var(--color-coral-glow);
   }
-  .neon-glow-magenta {
-    box-shadow: 0 0 15px var(--color-magenta-glow), 0 0 30px var(--color-magenta-glow);
+  .glow-teal {
+    box-shadow: 0 0 15px var(--color-teal-glow), 0 0 30px var(--color-teal-glow);
   }
 }

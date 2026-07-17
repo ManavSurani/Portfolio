@@ -21,13 +21,13 @@ export function SectionHeading({
         className
       )}
     >
-      <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-magenta-500">
+      <h2 className="text-3xl md:text-5xl font-bold mb-4">
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-coral-500 to-teal-500">
           {title}
         </span>
       </h2>
       {subtitle && (
-        <p className="text-beige-DEFAULT/80 text-lg md:text-xl max-w-2xl mx-auto">
+        <p className="text-muted text-lg md:text-xl max-w-2xl mx-auto">
           {subtitle}
         </p>
       )}

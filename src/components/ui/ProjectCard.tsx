@@ -14,7 +14,7 @@ interface ProjectCardProps {
   liveUrl?: string;
   githubUrl?: string;
   className?: string;
-  glowColor?: "cyan" | "magenta";
+  glowColor?: "coral" | "teal";
 }
 
 export function ProjectCard({
@@ -25,13 +25,13 @@ export function ProjectCard({
   liveUrl,
   githubUrl,
   className,
-  glowColor = "cyan",
+  glowColor = "coral",
 }: ProjectCardProps) {
   return (
     <div
       className={cn(
         "glass rounded-2xl overflow-hidden group transition-all duration-500",
-        glowColor === "cyan" ? "hover:neon-glow-cyan" : "hover:neon-glow-magenta",
+        glowColor === "coral" ? "hover:glow-coral" : "hover:glow-teal",
         className
       )}
     >
@@ -49,11 +49,11 @@ export function ProjectCard({
       <div className="p-6 relative">
         <h3 className={cn(
           "text-2xl font-bold mb-2",
-          glowColor === "cyan" ? "text-cyan-100" : "text-magenta-100"
+          glowColor === "coral" ? "text-coral-100" : "text-teal-100"
         )}>
           {title}
         </h3>
-        <p className="text-beige-DEFAULT/80 text-sm mb-6 line-clamp-3">
+        <p className="text-muted text-sm mb-6 line-clamp-3">
           {description}
         </p>
 

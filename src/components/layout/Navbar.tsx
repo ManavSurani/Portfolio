@@ -32,7 +32,7 @@ export function Navbar() {
     >
       <div className="container mx-auto px-6 max-w-7xl flex items-center justify-between">
         <Link href="#" className="text-xl font-bold tracking-tighter">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-magenta-500">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-coral-500 to-teal-500">
             MS.
           </span>
         </Link>
@@ -42,7 +42,7 @@ export function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className="text-sm font-medium text-foreground/80 hover:text-cyan-300 transition-colors"
+              className="text-sm font-medium text-foreground/80 hover:text-coral-300 transition-colors"
             >
               {link.name}
             </Link>
@@ -51,7 +51,7 @@ export function Navbar() {
 
         {/* Mobile menu could be added here later */}
         <div className="md:hidden">
-           <span className="text-cyan-400 font-bold">MS.</span>
+           <span className="text-coral-400 font-bold">MS.</span>
         </div>
       </div>
     </header>
