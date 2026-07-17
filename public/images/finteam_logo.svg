@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <!-- Left Cyan Triangle -->
+  <polygon points="25,75 42,90 25,105" fill="#00B4C6" />
+  
+  <!-- Navy Blue 'F' -->
+  <path d="M 52,25 H 132 V 55 H 87 V 135 H 52 Z" fill="#0B1F4E" />
+  
+  <!-- Yellow Inner Triangle -->
+  <polygon points="95,75 120,75 120,100" fill="#fbc02d" />
+  
+  <!-- Cyan Hollow 'T' -->
+  <path d="M 126,75 H 176 V 100 H 160 V 170 H 138 V 100 H 126 Z" 
+        fill="none" 
+        stroke="#00B4C6" 
+        stroke-width="6" 
+        stroke-linejoin="round" />
+</svg>
