@@ -24,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <body suppressHydrationWarning className={`${spaceGrotesk.variable} ${geistMono.variable} min-h-screen flex flex-col selection:bg-cyan-500/30 selection:text-cyan-200`}>
+    <html lang="en" className="light" suppressHydrationWarning>
+      <body suppressHydrationWarning className={`${spaceGrotesk.variable} ${geistMono.variable} min-h-screen flex flex-col bg-background text-foreground selection:bg-navy-DEFAULT/15 selection:text-navy-DEFAULT`}>
         {children}
       </body>
     </html>

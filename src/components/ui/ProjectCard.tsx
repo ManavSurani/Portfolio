@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, ArrowUpRight } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import { Button } from "./Button";
@@ -14,7 +14,7 @@ interface ProjectCardProps {
   liveUrl?: string;
   githubUrl?: string;
   className?: string;
-  glowColor?: "coral" | "teal";
+  category?: string;
 }
 
 export function ProjectCard({
@@ -25,61 +25,74 @@ export function ProjectCard({
   liveUrl,
   githubUrl,
   className,
-  glowColor = "coral",
+  category = "Featured Software",
 }: ProjectCardProps) {
   return (
     <div
       className={cn(
-        "glass rounded-2xl overflow-hidden group transition-all duration-500",
-        glowColor === "coral" ? "hover:glow-coral" : "hover:glow-teal",
+        "glass-card rounded-[24px] p-8 border border-border/80 flex flex-col justify-between card-hover relative overflow-hidden group",
         className
       )}
     >
-      <div className="relative w-full h-48 md:h-56 bg-surface">
-        <Image
-          src={image}
-          alt={title}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
-      </div>
+      {/* Decorative top ambient bar */}
+      <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-navy-DEFAULT via-steel-DEFAULT to-sand-dark opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
 
-      <div className="p-6 relative">
-        <h3 className={cn(
-          "text-2xl font-bold mb-2",
-          glowColor === "coral" ? "text-coral-100" : "text-teal-100"
-        )}>
+      <div>
+        {/* Header row with un-stretched logo icon badge & category tag */}
+        <div className="flex items-start justify-between gap-4 mb-6 pt-1">
+          <div className="w-16 h-16 rounded-2xl bg-white border border-sand-DEFAULT p-3 shadow-[0_4px_12px_rgba(27,42,74,0.06)] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300 overflow-hidden">
+            <Image
+              src={image}
+              alt={`${title} logo`}
+              width={48}
+              height={48}
+              className="object-contain max-h-full max-w-full"
+            />
+          </div>
+          {category && (
+            <span className="text-[11px] font-mono font-semibold tracking-wider uppercase text-steel-DEFAULT bg-steel-DEFAULT/10 border border-steel-DEFAULT/15 px-3 py-1 rounded-full">
+              {category}
+            </span>
+          )}
+        </div>
+
+        {/* Title & Description */}
+        <h3 className="text-2xl font-bold tracking-tight text-navy-DEFAULT mb-3 group-hover:text-navy-light transition-colors">
           {title}
         </h3>
-        <p className="text-muted text-sm mb-6 line-clamp-3">
+        <p className="text-muted text-sm leading-relaxed mb-6 line-clamp-3">
           {description}
         </p>
+      </div>
 
+      <div>
+        {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-6">
           {tags.map((tag) => (
             <span
               key={tag}
-              className="px-2.5 py-1 rounded-md text-xs font-medium bg-surface-hover border border-border/50 text-foreground/80"
+              className="px-3 py-1 rounded-full text-xs font-mono font-medium bg-background border border-border/70 text-foreground/80"
             >
               {tag}
             </span>
           ))}
         </div>
 
-        <div className="flex gap-4">
+        {/* Action Buttons */}
+        <div className="flex items-center gap-3 pt-2 border-t border-border/40">
           {liveUrl && (
-            <a href={liveUrl} target="_blank" rel="noopener noreferrer">
-              <Button variant="primary" size="sm" className="gap-2">
-                <ExternalLink size={16} /> Live Demo
+            <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
+              <Button variant="primary" size="sm" className="w-full gap-2 text-xs">
+                <span>Live Demo</span>
+                <ArrowUpRight size={14} />
               </Button>
             </a>
           )}
           {githubUrl && (
-            <a href={githubUrl} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="sm" className="gap-2">
-                <FaGithub size={16} /> Source
+            <a href={githubUrl} target="_blank" rel="noopener noreferrer" className={liveUrl ? "" : "flex-1"}>
+              <Button variant="outline" size="sm" className={cn("gap-2 text-xs", !liveUrl && "w-full")}>
+                <FaGithub size={14} />
+                <span>Source</span>
               </Button>
             </a>
           )}

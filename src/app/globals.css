@@ -1,50 +1,75 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #351615;
-  --color-foreground: #D8CBC4;
+  --color-background: #F6F3EE;
+  --color-foreground: #1C2029;
   
-  --color-coral-DEFAULT: #EE4C64;
-  --color-coral-glow: rgba(238, 76, 100, 0.5);
+  --color-navy-DEFAULT: #1B2A4A;
+  --color-navy-dark: #121E36;
+  --color-navy-light: #2A3F68;
 
-  --color-teal-DEFAULT: #9ACBCB;
-  --color-teal-glow: rgba(154, 203, 203, 0.5);
+  --color-steel-DEFAULT: #4A5D7E;
+  --color-steel-light: #6A7E9F;
 
-  --color-highlight: #D6815F;
-  --color-heading: #F3E9E2;
-  --color-muted: #B89E95;
+  --color-cream-DEFAULT: #F6F3EE;
+  --color-cream-card: #FFFFFF;
+  --color-cream-hover: #FAF7F2;
 
-  --color-surface: #412A33;
-  --color-surface-hover: #6D392E;
-  --color-border: #7A5246;
+  --color-sand-DEFAULT: #E5DFD7;
+  --color-sand-dark: #D4CBC0;
+
+  --color-surface: #FFFFFF;
+  --color-surface-hover: #FAF7F2;
+  --color-border: #E5DFD7;
   
+  --color-muted: #636875;
+  --color-heading: #1C2029;
+
   --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 @layer base {
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-sans antialiased selection:bg-navy-DEFAULT/10 selection:text-navy-DEFAULT;
     background-image: 
-      radial-gradient(circle at 15% 50%, rgba(238, 76, 100, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 85% 30%, rgba(154, 203, 203, 0.05) 0%, transparent 50%);
+      radial-gradient(circle at 10% 20%, rgba(229, 223, 215, 0.5) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(74, 93, 126, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, rgba(246, 243, 238, 1) 0%, transparent 100%);
     background-attachment: fixed;
   }
 }
 
-/* Custom utility for glassmorphism */
+/* Custom utilities for World-Class Executive UI */
 @layer utilities {
-  .glass {
-    @apply bg-surface/80 backdrop-blur-md border border-border/50;
+  .glass-card {
+    @apply bg-surface/90 backdrop-blur-md border border-border/80 shadow-[0_4px_20px_-4px_rgba(27,42,74,0.05)];
   }
-  .glow-coral {
-    box-shadow: 0 0 15px var(--color-coral-glow), 0 0 30px var(--color-coral-glow);
+
+  .glass-nav {
+    @apply bg-background/80 backdrop-blur-lg border-b border-border/60 shadow-[0_2px_15px_-3px_rgba(27,42,74,0.04)];
   }
-  .glow-teal {
-    box-shadow: 0 0 15px var(--color-teal-glow), 0 0 30px var(--color-teal-glow);
+
+  .card-hover {
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 35px -10px rgba(27, 42, 74, 0.08), 0 0 1px 1px rgba(27, 42, 74, 0.05);
+  }
+
+  .portrait-blend {
+    mask-image: radial-gradient(circle at center, black 65%, transparent 100%);
+  }
+
+  .text-gradient-navy {
+    background: linear-gradient(135deg, #121E36 0%, #2A3F68 50%, #4A5D7E 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }
