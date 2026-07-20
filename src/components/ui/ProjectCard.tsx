@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ExternalLink, ArrowUpRight } from "lucide-react";
+import { ExternalLink, ArrowUpRight, Maximize2 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import { Button } from "./Button";
@@ -15,6 +15,7 @@ interface ProjectCardProps {
   githubUrl?: string;
   className?: string;
   category?: string;
+  onOpenModal?: () => void;
 }
 
 export function ProjectCard({
@@ -26,11 +27,13 @@ export function ProjectCard({
   githubUrl,
   className,
   category = "Featured Software",
+  onOpenModal,
 }: ProjectCardProps) {
   return (
     <div
+      onClick={onOpenModal}
       className={cn(
-        "glass-card rounded-[24px] p-8 border border-border/80 flex flex-col justify-between card-hover relative overflow-hidden group",
+        "glass-card rounded-[24px] p-7 border border-border/80 flex flex-col justify-between h-full min-h-[400px] card-hover relative overflow-hidden group cursor-pointer",
         className
       )}
     >
@@ -39,8 +42,8 @@ export function ProjectCard({
 
       <div>
         {/* Header row with un-stretched logo icon badge & category tag */}
-        <div className="flex items-start justify-between gap-4 mb-6 pt-1">
-          <div className="w-16 h-16 rounded-2xl bg-white border border-sand-DEFAULT p-3 shadow-[0_4px_12px_rgba(27,42,74,0.06)] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300 overflow-hidden">
+        <div className="flex items-start justify-between gap-4 mb-5 pt-1">
+          <div className="w-16 h-16 rounded-2xl bg-white border border-sand-DEFAULT p-3 shadow-xs flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300 overflow-hidden">
             <Image
               src={image}
               alt={`${title} logo`}
@@ -78,24 +81,50 @@ export function ProjectCard({
           ))}
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-3 pt-2 border-t border-border/40">
-          {liveUrl && (
-            <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
-              <Button variant="primary" size="sm" className="w-full gap-2 text-xs">
-                <span>Live Demo</span>
-                <ArrowUpRight size={14} />
-              </Button>
-            </a>
-          )}
+        {/* Action Buttons - Uniform across all cards */}
+        <div className="flex items-center gap-2 pt-4 border-t border-border/40">
           {githubUrl && (
-            <a href={githubUrl} target="_blank" rel="noopener noreferrer" className={liveUrl ? "" : "flex-1"}>
-              <Button variant="outline" size="sm" className={cn("gap-2 text-xs", !liveUrl && "w-full")}>
-                <FaGithub size={14} />
+            <a 
+              href={githubUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="flex-1"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Button variant="outline" size="sm" className="w-full gap-1.5 text-xs px-3">
+                <FaGithub size={13} />
                 <span>Source</span>
               </Button>
             </a>
           )}
+
+          {liveUrl && (
+            <a 
+              href={liveUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="flex-1"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Button variant="primary" size="sm" className="w-full gap-1.5 text-xs px-3">
+                <span>Live</span>
+                <ArrowUpRight size={13} />
+              </Button>
+            </a>
+          )}
+
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="gap-1 text-xs text-navy-DEFAULT hover:bg-navy-DEFAULT/10 shrink-0 px-3"
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenModal?.();
+            }}
+          >
+            <Maximize2 size={13} />
+            <span>Details</span>
+          </Button>
         </div>
       </div>
     </div>
