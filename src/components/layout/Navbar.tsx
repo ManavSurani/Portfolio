@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/Button";
 
@@ -31,13 +32,26 @@ export function Navbar() {
       )}
     >
       <div className="container mx-auto px-6 max-w-7xl flex items-center justify-between">
-        <Link href="#" className="flex items-center gap-2 group">
-          <div className="w-9 h-9 rounded-full bg-navy-DEFAULT text-white flex items-center justify-center font-bold text-sm shadow-sm group-hover:bg-navy-dark transition-colors">
-            MS
+        <Link href="#" className="flex items-center gap-2.5 group">
+          {/* Profile Photo — replaces MS initials */}
+          <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-sand-DEFAULT shadow-sm group-hover:ring-2 group-hover:ring-navy-DEFAULT/25 transition-all duration-300 shrink-0">
+            <Image
+              src="/images/profile_suite.png"
+              alt="Manav Surani"
+              width={36}
+              height={36}
+              className="object-cover object-top w-full h-full"
+            />
           </div>
-          <span className="text-base font-bold tracking-tight text-navy-DEFAULT hidden sm:inline-block">
-            Manav Surani
-          </span>
+          {/* Two-line stacked name identity */}
+          <div className="hidden sm:flex flex-col leading-none">
+            <span className="text-sm font-bold tracking-tight text-navy-DEFAULT">
+              Manav Surani
+            </span>
+            <span className="text-[10px] font-mono font-semibold text-steel-DEFAULT uppercase tracking-widest mt-0.5">
+              Full-Stack Engineer
+            </span>
+          </div>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1 bg-white/70 backdrop-blur-md border border-sand-DEFAULT/60 p-1.5 rounded-full shadow-sm">
