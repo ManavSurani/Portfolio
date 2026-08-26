@@ -21,7 +21,9 @@ export interface ProjectDetailData {
   githubUrl?: string;
   videoThumbnail?: string;
   videoTitle?: string;
+  videoUrl?: string;
   galleryImages?: string[];
+  builtYear?: string;
 }
 
 interface ProjectModalProps {
@@ -90,9 +92,16 @@ export function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
                   />
                 </div>
                 <div>
-                  <span className="text-[11px] font-mono font-bold tracking-wider uppercase text-steel-DEFAULT bg-steel-DEFAULT/10 border border-steel-DEFAULT/15 px-3 py-1 rounded-full inline-block mb-2">
-                    {project.category}
-                  </span>
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                    <span className="text-[11px] font-mono font-bold tracking-wider uppercase text-steel-DEFAULT bg-steel-DEFAULT/10 border border-steel-DEFAULT/15 px-3 py-1 rounded-full inline-block">
+                      {project.category}
+                    </span>
+                    {project.builtYear && (
+                      <span className="text-[11px] font-mono font-bold tracking-wider uppercase text-navy-DEFAULT bg-navy-DEFAULT/8 border border-navy-DEFAULT/15 px-3 py-1 rounded-full inline-block">
+                        Built {project.builtYear}
+                      </span>
+                    )}
+                  </div>
                   <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-navy-DEFAULT">
                     {project.title}
                   </h2>
@@ -117,27 +126,41 @@ export function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
                 </h3>
 
                 <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-2xl overflow-hidden bg-navy-dark/90 border border-sand-DEFAULT shadow-md group">
-                  <Image
-                    src={project.videoThumbnail || project.image}
-                    alt={project.title}
-                    fill
-                    sizes="(max-width: 1200px) 100vw, 900px"
-                    className="object-cover opacity-85 group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy-DEFAULT/90 via-navy-DEFAULT/30 to-transparent" />
+                  {project.videoUrl ? (
+                    <video
+                      src={project.videoUrl}
+                      autoPlay
+                      loop
+                      muted
+                      controls
+                      playsInline
+                      className="w-full h-full object-cover rounded-2xl"
+                    />
+                  ) : (
+                    <>
+                      <Image
+                        src={project.videoThumbnail || project.image}
+                        alt={project.title}
+                        fill
+                        sizes="(max-width: 1200px) 100vw, 900px"
+                        className="object-cover opacity-85 group-hover:scale-105 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-navy-DEFAULT/90 via-navy-DEFAULT/30 to-transparent" />
 
-                  {/* Play Button Overlay */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 text-white">
-                    <div className="w-16 h-16 rounded-full bg-white/95 text-navy-DEFAULT shadow-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                      <Play size={26} className="ml-1 fill-navy-DEFAULT" />
-                    </div>
-                    <span className="text-sm font-semibold tracking-wide drop-shadow-sm">
-                      {project.videoTitle || `Watch ${project.title} Live Demo Video`}
-                    </span>
-                    <span className="text-xs text-sand-DEFAULT/80 font-mono mt-1">
-                      Interactive Showcase & Workflow
-                    </span>
-                  </div>
+                      {/* Play Button Overlay */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 text-white">
+                        <div className="w-16 h-16 rounded-full bg-white/95 text-navy-DEFAULT shadow-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                          <Play size={26} className="ml-1 fill-navy-DEFAULT" />
+                        </div>
+                        <span className="text-sm font-semibold tracking-wide drop-shadow-sm">
+                          {project.videoTitle || `Watch ${project.title} Live Demo Video`}
+                        </span>
+                        <span className="text-xs text-sand-DEFAULT/80 font-mono mt-1">
+                          Interactive Showcase & Workflow
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 

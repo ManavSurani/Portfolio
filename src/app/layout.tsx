@@ -13,9 +13,65 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = "https://portfolio-manav-surani.vercel.app";
+
 export const metadata: Metadata = {
-  title: "Manav Surani | Full-Stack Software Engineer",
-  description: "Portfolio of Manav Surani, a Full-Stack Software Engineer & AI Integrator specializing in Next.js, Python, and scalable databases.",
+  metadataBase: new URL(siteUrl),
+  title: "Manav Surani | Full-Stack Software Engineer & AI Integrator",
+  description:
+    "Portfolio of Manav Surani — MSc IT Scholar & Full-Stack Software Engineer specializing in Next.js, Python, FastAPI, and autonomous AI pipelines. Based in Surat, Gujarat.",
+  keywords: [
+    "Manav Surani",
+    "Full-Stack Developer",
+    "Software Engineer",
+    "Next.js Developer",
+    "Python Developer",
+    "AI Developer",
+    "FastAPI",
+    "React Developer",
+    "MSc IT",
+    "Surat Developer",
+    "Portfolio",
+    "PNP CRM",
+    "FinTeam",
+  ],
+  authors: [{ name: "Manav Surani", url: siteUrl }],
+  creator: "Manav Surani",
+  alternates: {
+    canonical: siteUrl,
+  },
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    title: "Manav Surani | Full-Stack Software Engineer & AI Integrator",
+    description:
+      "MSc IT Scholar & Full-Stack Engineer — Next.js, Python, FastAPI & autonomous AI pipelines. 6+ production apps. Open to Software Engineering roles.",
+    siteName: "Manav Surani Portfolio",
+    images: [
+      {
+        url: "/images/profile_suite.png",
+        width: 1200,
+        height: 630,
+        alt: "Manav Surani - Full-Stack Software Engineer Portfolio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Manav Surani | Full-Stack Software Engineer & AI Integrator",
+    description:
+      "MSc IT Scholar & Full-Stack Engineer — Next.js, Python, FastAPI & autonomous AI pipelines. 6+ production apps.",
+    images: ["/images/profile_suite.png"],
+    creator: "@ManavSurani",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
 };
 
 export default function RootLayout({

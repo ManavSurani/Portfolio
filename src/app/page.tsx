@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { motion, Variants } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
@@ -10,6 +10,8 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { SkillBadge } from "@/components/ui/SkillBadge";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { ProjectModal, ProjectDetailData } from "@/components/ui/ProjectModal";
+import { ScrollToTop } from "@/components/ui/ScrollToTop";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { 
   ArrowRight, 
   Mail, 
@@ -44,7 +46,7 @@ const staggerContainer: Variants = {
 };
 
 // Rich Project Data for Modals
-const projectsData: (ProjectDetailData & { id: string; shortDesc: string; image: string; tags: string[]; liveUrl?: string; githubUrl: string })[] = [
+const projectsData: (ProjectDetailData & { id: string; shortDesc: string; image: string; tags: string[]; liveUrl?: string; githubUrl: string; videoUrl?: string })[] = [
   {
     id: "pnp-crm",
     title: "PNP CRM",
@@ -66,7 +68,9 @@ const projectsData: (ProjectDetailData & { id: string; shortDesc: string; image:
     image: "/images/pnp_crm_logo.png",
     tags: ["Next.js", "TypeScript", "Prisma", "@dnd-kit", "PostgreSQL"],
     githubUrl: "https://github.com/ManavSurani/PNP_crm",
-    videoTitle: "PNP CRM - Interactive Kanban & Quote Generation Workflow"
+    videoTitle: "PNP CRM - Interactive Kanban & Quote Generation Workflow",
+    videoUrl: "/images/pnp_crm_demo.webm",
+    builtYear: "2025"
   },
   {
     id: "finteam",
@@ -90,7 +94,8 @@ const projectsData: (ProjectDetailData & { id: string; shortDesc: string; image:
     tags: ["Next.js", "PostgreSQL", "Gemini API", "Recharts", "Neon DB"],
     liveUrl: "https://finteam-f3qv.vercel.app",
     githubUrl: "https://github.com/ManavSurani/Finteam",
-    videoTitle: "FinTeam FaaS - Live Analytics & Gemini AI Drafting Demo"
+    videoTitle: "FinTeam FaaS - Live Analytics & Gemini AI Drafting Demo",
+    builtYear: "2025"
   },
   {
     id: "furnish-florish",
@@ -112,7 +117,8 @@ const projectsData: (ProjectDetailData & { id: string; shortDesc: string; image:
     image: "/images/furnish_logo.jpg",
     tags: ["ASP.NET", "C#", "SQL Server", "CSS3", "ADO.NET"],
     githubUrl: "https://github.com/ManavSurani/Furnish-Florish",
-    videoTitle: "Furnish & Florish - ASP.NET Catalog & Management Portal"
+    videoTitle: "Furnish & Florish - ASP.NET Catalog & Management Portal",
+    builtYear: "2024"
   },
   {
     id: "print-folder",
@@ -134,7 +140,8 @@ const projectsData: (ProjectDetailData & { id: string; shortDesc: string; image:
     image: "/images/print_folder_logo.ico",
     tags: ["Python", "PyQt5", "PyPDF2", "PyInstaller", "LLM Utility"],
     githubUrl: "https://github.com/ManavSurani/Print-any-folder",
-    videoTitle: "Print-any-folder - Codebase Parsing & Prompt Formatting Showcase"
+    videoTitle: "Print-any-folder - Codebase Parsing & Prompt Formatting Showcase",
+    builtYear: "2025"
   },
   {
     id: "blog-bot",
@@ -158,7 +165,8 @@ const projectsData: (ProjectDetailData & { id: string; shortDesc: string; image:
     image: "/images/blog_bot_logo.jpg",
     tags: ["FastAPI", "Python", "Groq Llama 70B", "Gemini 2.5", "Supabase", "Tavily API"],
     githubUrl: "https://github.com/ManavSurani/PNP_Image_rendaring_bot",
-    videoTitle: "Blog Bot - Asynchronous Multi-LLM AI Content Pipeline Workflow"
+    videoTitle: "Blog Bot - Asynchronous Multi-LLM AI Content Pipeline Workflow",
+    builtYear: "2025"
   },
   {
     id: "furniture-mgmt",
@@ -180,14 +188,15 @@ const projectsData: (ProjectDetailData & { id: string; shortDesc: string; image:
     image: "/images/furniture_app_logo.jpg",
     tags: ["VB.NET", "WinForms", "SQL Server", "RDLC Reports"],
     githubUrl: "https://github.com/ManavSurani/Furniture-Management-System",
-    videoTitle: "Furniture Management - Retail Billing & RDLC Reporting Demo"
+    videoTitle: "Furniture Management - Retail Billing & RDLC Reporting Demo",
+    builtYear: "2024"
   }
 ];
 
 // Internship Detail Data for Modal
 const internshipModalData: ProjectDetailData = {
   title: "Software Engineering Intern - AI Autonomous Pipeline",
-  category: "VN Code Pro • Summer Internship",
+  category: "VN Code Pro • May 2025 – Jun 2025",
   description: "Architected and deployed an autonomous AI blog generation pipeline using Python, FastAPI, Groq Llama 70B, Gemini 2.5 Flash, Tavily, and Supabase.",
   fullOverview: "During my Summer Internship at VN Code Pro, I took ownership of designing and deploying an end-to-end autonomous AI blog generation and publishing system ('VN Code Pro Blog Bot'). The engine operates 24/7, continuously generating SEO-optimized technical content, cross-verifying facts against live web data, and publishing directly to CMS endpoints.",
   architectureDetails: [
@@ -209,6 +218,13 @@ const internshipModalData: ProjectDetailData = {
 
 export default function Home() {
   const [selectedProject, setSelectedProject] = useState<ProjectDetailData | null>(null);
+  const [emailCopied, setEmailCopied] = useState(false);
+
+  const copyEmail = useCallback(() => {
+    navigator.clipboard.writeText("manavsurani982@gmail.com");
+    setEmailCopied(true);
+    setTimeout(() => setEmailCopied(false), 2000);
+  }, []);
 
   return (
     <>
@@ -255,6 +271,28 @@ export default function Home() {
                     <span>Get in Touch</span>
                   </Button>
                 </a>
+                <div className="flex items-center gap-2">
+                  <a
+                    href="https://github.com/ManavSurani"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="GitHub Profile"
+                  >
+                    <Button variant="outline" size="lg" className="px-3.5 text-sm">
+                      <FaGithub size={20} />
+                    </Button>
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/manav-surani"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn Profile"
+                  >
+                    <Button variant="outline" size="lg" className="px-3.5 text-sm">
+                      <FaLinkedin size={20} />
+                    </Button>
+                  </a>
+                </div>
               </motion.div>
 
               <motion.div variants={fadeUp} className="pt-6 grid grid-cols-3 gap-6 border-t border-border/60 max-w-lg">
@@ -464,7 +502,7 @@ export default function Home() {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-xs font-mono font-bold tracking-wider text-navy-DEFAULT bg-navy-DEFAULT/10 px-4 py-2 rounded-full self-start sm:self-center">
-                      Summer Internship
+                      May 2025 – Jun 2025
                     </span>
                     <Button variant="ghost" size="sm" className="gap-1 text-xs text-navy-DEFAULT group-hover:bg-navy-DEFAULT/10">
                       <Maximize2 size={14} />
@@ -615,13 +653,23 @@ export default function Home() {
                 Whether you have an open software engineering role, a project opportunity, or just want to discuss AI pipelines — my inbox is always open.
               </p>
               
-              <div className="pt-6">
+              <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a href="mailto:manavsurani982@gmail.com">
                   <Button variant="primary" size="lg" className="bg-white text-navy-DEFAULT hover:bg-cream-DEFAULT border-none text-base px-10 py-4 shadow-lg hover:shadow-xl">
                     <Mail size={18} className="mr-2" />
                     <span>manavsurani982@gmail.com</span>
                   </Button>
                 </a>
+                <button
+                  onClick={copyEmail}
+                  className="text-sm font-mono font-semibold text-white/70 hover:text-white border border-white/20 hover:border-white/50 px-5 py-3 rounded-xl transition-all duration-200 flex items-center gap-2"
+                >
+                  {emailCopied ? (
+                    <>✓ Copied!</>
+                  ) : (
+                    <>Copy Email</>
+                  )}
+                </button>
               </div>
             </motion.div>
           </div>
@@ -636,6 +684,9 @@ export default function Home() {
       />
 
       <Footer />
+
+      {/* FLOATING SCROLL TO TOP */}
+      <ScrollToTop />
     </>
   );
 }
