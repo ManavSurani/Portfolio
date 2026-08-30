@@ -42,3 +42,27 @@ Fix confirmed bugs (floating badge clipping, ScrollToTop vs MobileCTA collision 
 
 ### Verification
 - `npx tsc --noEmit; npm run build` completed with code 0 (all static pages generated cleanly, zero TypeScript errors).
+
+---
+
+## Session: Add Certificate Link to Internship Experience (2026-08-30)
+
+### User Request
+Add Google Drive Certificate link to the "Software Engineering Intern — VN Code Pro" card in the Experience section and its detail modal.
+
+### What Was Done
+1. **Extended `ProjectDetailData` Interface (`src/components/ui/ProjectModal.tsx`)**:
+   - Added optional `certificateUrl?: string;` property.
+   - Imported `Award` icon from `lucide-react`.
+
+2. **Added Modal Footer Action Button (`src/components/ui/ProjectModal.tsx`)**:
+   - Rendered "View Certificate" button with `Award` icon in `variant="outline"` between `githubUrl` and `liveUrl` opening in a new tab (`target="_blank"`).
+
+3. **Updated Internship Data (`src/app/page.tsx`)**:
+   - Added `certificateUrl: "https://drive.google.com/file/d/1SsRAuTNAmdFRQV-Dn0UMw_J4wZ9qQB_2/view"` to `internshipModalData`.
+
+4. **Added Direct One-Click Certificate Link on Card Footer (`src/app/page.tsx`)**:
+   - Added a clean secondary text link with `Award` and `ExternalLink` icons (`onClick={(e) => e.stopPropagation()}`) directly above the modal opening trigger, preventing unintended modal popups.
+
+### Verification
+- `npx tsc --noEmit; npm run build` completed with code 0 (zero TypeScript errors, clean static generation).

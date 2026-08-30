@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ExternalLink, Play, CheckCircle2, Cpu, Code2 } from "lucide-react";
+import { X, ExternalLink, Play, CheckCircle2, Cpu, Code2, Award } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { Button } from "./Button";
 import { SkillBadge } from "./SkillBadge";
@@ -19,6 +19,7 @@ export interface ProjectDetailData {
   tags: string[];
   liveUrl?: string;
   githubUrl?: string;
+  certificateUrl?: string;
   videoThumbnail?: string;
   videoTitle?: string;
   videoUrl?: string;
@@ -212,6 +213,14 @@ export function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
                     <Button variant="outline" size="sm" className="gap-2">
                       <FaGithub size={16} />
                       <span>Source Code</span>
+                    </Button>
+                  </a>
+                )}
+                {project.certificateUrl && (
+                  <a href={project.certificateUrl} target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <Award size={16} />
+                      <span>View Certificate</span>
                     </Button>
                   </a>
                 )}

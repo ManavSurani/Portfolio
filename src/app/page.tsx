@@ -225,6 +225,7 @@ const internshipModalData: ProjectDetailData = {
   image: "/images/blog_bot_logo.jpg",
   tags: ["FastAPI", "Python", "Groq Llama 70B", "Gemini 2.5 Flash", "Tavily API", "Supabase"],
   githubUrl: "https://github.com/ManavSurani/PNP_Image_rendaring_bot",
+  certificateUrl: "https://drive.google.com/file/d/1SsRAuTNAmdFRQV-Dn0UMw_J4wZ9qQB_2/view",
   videoTitle: "VN Code Pro Internship - AI Blog Bot Pipeline Demonstration"
 };
 
@@ -655,15 +656,29 @@ export default function Home() {
                   </li>
                 </ul>
 
-                <div className="mt-8 pt-6 border-t border-border/40 flex flex-wrap items-center justify-between gap-4">
-                  <div className="flex flex-wrap gap-2">
-                    {["FastAPI", "Python", "Groq Llama 70B", "Gemini 2.5", "Tavily API", "Supabase"].map(tech => (
-                      <SkillBadge key={tech} name={tech} variant="minimal" />
-                    ))}
+                <div className="mt-8 pt-6 border-t border-border/40">
+                  <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+                    <div className="flex flex-wrap gap-2">
+                      {["FastAPI", "Python", "Groq Llama 70B", "Gemini 2.5", "Tavily API", "Supabase"].map(tech => (
+                        <SkillBadge key={tech} name={tech} variant="minimal" />
+                      ))}
+                    </div>
+                    <span className="text-xs font-mono font-semibold text-navy-DEFAULT flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                      View AI Architecture Modal <ChevronRight size={14} />
+                    </span>
                   </div>
-                  <span className="text-xs font-mono font-semibold text-navy-DEFAULT flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                    View AI Architecture Modal <ChevronRight size={14} />
-                  </span>
+
+                  <a
+                    href="https://drive.google.com/file/d/1SsRAuTNAmdFRQV-Dn0UMw_J4wZ9qQB_2/view"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-steel-DEFAULT hover:text-navy-DEFAULT transition-colors"
+                  >
+                    <Award size={13} />
+                    View Completion Certificate
+                    <ExternalLink size={11} />
+                  </a>
                 </div>
               </div>
             </div>
