@@ -25,7 +25,7 @@ export function ScrollToTop() {
           transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           onClick={scrollTop}
           aria-label="Scroll to top"
-          className="fixed bottom-8 right-8 z-40 w-11 h-11 rounded-full bg-navy-DEFAULT text-white shadow-lg hover:shadow-xl hover:bg-navy-light flex items-center justify-center transition-colors duration-200"
+          className="hidden md:flex fixed bottom-8 right-8 z-40 w-11 h-11 rounded-full bg-navy-DEFAULT text-white shadow-lg hover:shadow-xl hover:bg-navy-light items-center justify-center transition-colors duration-200"
         >
           <ArrowUp size={18} />
         </motion.button>

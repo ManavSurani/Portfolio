@@ -4,23 +4,31 @@ import { useRef, useEffect, useState } from "react";
 import { motion, useScroll } from "framer-motion";
 
 /**
- * SectionSpine — Phase C4 upgrade
- * Adds scroll-linked progress nodes at each section entry point.
+ * SectionSpine — Phase A3 & B2
+ * Adds scroll-linked progress nodes at each section entry point with hover tooltips.
  * Each node transitions sand→navy and scales up when its section is active.
  *
- * Uses its own lightweight IntersectionObserver scoped to the 4 spine sections
- * (about, skills, experience, projects). This is intentionally separate from
- * Navbar's observer — Navbar tracks its own active pill, SectionSpine tracks
- * its own node state. Both disconnect cleanly on unmount.
+ * Visual:
+ * - left-16 (64px) margin from edge — clear separation from browser UI
+ * - w-[3px] rounded-full with sand-DEFAULT/60 track
  *
- * Node positions: computed once on mount via getBoundingClientRect, relative
- * to the spine wrapper — never hardcoded pixel values.
+ * Robustness:
+ * - Recomputes on font ready + 500ms timeout fallback for layout stabilization
  *
- * Desktop-only: hidden xl:block. Nodes are passive "you are here" indicators,
- * not clickable/navigable (no second navigation system).
+ * Tooltip (Phase B2):
+ * - Hovering node displays label (About, Skills, Experience, Projects)
+ *
+ * Desktop-only: hidden xl:block. Passive indicators (no second navigation system).
  */
 
 const SPINE_SECTIONS = ["about", "skills", "experience", "projects"];
+
+const SECTION_LABELS: Record<string, string> = {
+  about: "About",
+  skills: "Skills",
+  experience: "Experience",
+  projects: "Projects",
+};
 
 export function SectionSpine() {
   const spineRef = useRef<HTMLDivElement>(null);
@@ -50,9 +58,19 @@ export function SectionSpine() {
     };
 
     computeOffsets();
+
+    // A3 Robustness: Recompute when fonts/images settle
+    if (typeof document !== "undefined" && document.fonts) {
+      document.fonts.ready.then(computeOffsets);
+    }
+    const timeout = setTimeout(computeOffsets, 500);
+
     // Recompute if window resizes (content reflows)
     window.addEventListener("resize", computeOffsets, { passive: true });
-    return () => window.removeEventListener("resize", computeOffsets);
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener("resize", computeOffsets);
+    };
   }, []);
 
   // Lightweight IntersectionObserver for active section highlighting
@@ -79,30 +97,41 @@ export function SectionSpine() {
   return (
     <div
       ref={spineRef}
-      className="hidden xl:block absolute left-8 top-0 bottom-0 w-[2px] bg-sand-DEFAULT pointer-events-none"
+      className="hidden xl:block absolute left-16 top-0 bottom-0 w-[3px] bg-sand-DEFAULT/60 pointer-events-none rounded-full"
     >
       {/* Scroll-fill line */}
       <motion.div
         style={{ scaleY: scrollYProgress, transformOrigin: "top" }}
-        className="w-full h-full bg-navy-DEFAULT"
+        className="w-full h-full bg-navy-DEFAULT rounded-full"
       />
 
-      {/* C4 — Section progress nodes */}
+      {/* C4 / B2 — Section progress nodes & hover tooltips */}
       {SPINE_SECTIONS.map((id) =>
         nodeOffsets[id] !== undefined ? (
-          <motion.div
+          <div
             key={id}
-            className="absolute left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full"
+            className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
             style={{ top: nodeOffsets[id] }}
-            animate={{
-              backgroundColor:
-                activeSection === id
-                  ? "var(--color-navy-DEFAULT)"
-                  : "var(--color-sand-DEFAULT)",
-              scale: activeSection === id ? 1.4 : 1,
-            }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          />
+          >
+            <div className="group relative flex items-center justify-center p-1 cursor-default">
+              <motion.div
+                className="w-2.5 h-2.5 rounded-full"
+                animate={{
+                  backgroundColor:
+                    activeSection === id
+                      ? "var(--color-navy-DEFAULT)"
+                      : "var(--color-sand-DEFAULT)",
+                  scale: activeSection === id ? 1.4 : 1,
+                }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              />
+
+              {/* B2 — Tooltip label on hover */}
+              <span className="absolute left-6 top-1/2 -translate-y-1/2 whitespace-nowrap text-[11px] font-mono font-semibold text-navy-DEFAULT bg-white/95 border border-sand-DEFAULT px-2.5 py-1 rounded-md shadow-sm pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                {SECTION_LABELS[id]}
+              </span>
+            </div>
+          </div>
         ) : null
       )}
     </div>
