@@ -395,18 +395,15 @@ export default function Home() {
               </motion.div>
             </motion.div>
 
-            <motion.div 
+            {/* C2 — Portrait reveal: inset wipe (top→bottom) merged onto single motion.div.
+                  inset(0%) = fully visible at rest — safe fallback if animation is skipped.
+                  No nested motion.div conflict; no circle() center-point calculation bug. */}
+            <motion.div
               className="lg:col-span-5 flex justify-center lg:justify-end"
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+              initial={{ opacity: 0, scale: 0.95, y: 20, clipPath: "inset(100% 0% 0% 0%)" }}
+              animate={{ opacity: 1, scale: 1, y: 0, clipPath: "inset(0% 0% 0% 0%)" }}
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
             >
-              {/* C2 — Portrait clip-path circular reveal: starts after text stagger (delay 0.4s) */}
-              <motion.div
-                initial={{ clipPath: "circle(0% at 50% 40%)" }}
-                animate={{ clipPath: "circle(80% at 50% 40%)" }}
-                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-              >
               <div className="relative w-full max-w-[420px] aspect-[4/5] rounded-[32px] p-3 bg-white border border-sand-DEFAULT/90 shadow-[0_20px_50px_-10px_rgba(27,42,74,0.12)] group">
                 <div className="w-full h-full rounded-[24px] overflow-hidden bg-gradient-to-b from-[#EAE3DB] to-[#F6F3EE] relative">
                   <Image
@@ -420,7 +417,7 @@ export default function Home() {
                   <div className="absolute inset-0 bg-gradient-to-t from-navy-DEFAULT/15 via-transparent to-transparent pointer-events-none" />
                 </div>
 
-                {/* 2.1 — Floating badge: parallax, desktop-only (moves up faster than portrait) */}
+                {/* 2.1 — Floating badge: parallax, desktop-only */}
                 <div className="hidden lg:block">
                   <motion.div
                     style={{ y: badgeY }}
@@ -446,7 +443,6 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              </motion.div>{/* end C2 clip-path reveal */}
             </motion.div>
           </div>
         </section>
