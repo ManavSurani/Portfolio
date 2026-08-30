@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface SectionHeadingProps {
@@ -35,6 +38,18 @@ export function SectionHeading({
         {title}
       </h2>
 
+      {/* 1.4 — Animated accent underline: draws left-to-right after the title fades in */}
+      <motion.div
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+        className={cn(
+          "h-[3px] w-12 bg-navy-DEFAULT origin-left rounded-full",
+          align === "center" ? "mx-auto" : ""
+        )}
+      />
+
       {subtitle && (
         <p className="text-muted text-base md:text-lg leading-relaxed max-w-2xl mx-auto font-normal">
           {subtitle}
@@ -43,3 +58,4 @@ export function SectionHeading({
     </div>
   );
 }
+

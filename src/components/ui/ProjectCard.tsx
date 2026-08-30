@@ -1,7 +1,8 @@
 "use client";
 
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
-import { ExternalLink, ArrowUpRight, Maximize2 } from "lucide-react";
+import { ArrowUpRight, Maximize2 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import { Button } from "./Button";
@@ -18,6 +19,36 @@ interface ProjectCardProps {
   onOpenModal?: () => void;
 }
 
+/**
+ * 2.3 — useTiltHandlers
+ * Cursor-driven 3D tilt effect. Desktop-only — onMouseMove only fires on
+ * pointer devices, touch devices never trigger it.
+ * Max tilt: ±4 degrees (premium subtlety, not a game UI).
+ * useSpring smooths raw mouse values → fluid, not jittery.
+ */
+function useTiltHandlers() {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [4, -4]), {
+    stiffness: 150,
+    damping: 15,
+  });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-4, 4]), {
+    stiffness: 150,
+    damping: 15,
+  });
+  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    x.set((e.clientX - rect.left) / rect.width - 0.5);
+    y.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
+  const onMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+  return { rotateX, rotateY, onMouseMove, onMouseLeave };
+}
+
 export function ProjectCard({
   title,
   description,
@@ -29,9 +60,14 @@ export function ProjectCard({
   category = "Featured Software",
   onOpenModal,
 }: ProjectCardProps) {
+  const { rotateX, rotateY, onMouseMove, onMouseLeave } = useTiltHandlers();
+
   return (
-    <div
+    <motion.div
       onClick={onOpenModal}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+      style={{ rotateX, rotateY, transformPerspective: 800 }}
       className={cn(
         "glass-card rounded-[24px] p-7 border border-border/80 flex flex-col justify-between h-full min-h-[400px] card-hover relative overflow-hidden group cursor-pointer",
         className
@@ -84,10 +120,10 @@ export function ProjectCard({
         {/* Action Buttons - Uniform across all cards */}
         <div className="flex items-center gap-2 pt-4 border-t border-border/40">
           {githubUrl && (
-            <a 
-              href={githubUrl} 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <a
+              href={githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex-1"
               onClick={(e) => e.stopPropagation()}
             >
@@ -99,10 +135,10 @@ export function ProjectCard({
           )}
 
           {liveUrl && (
-            <a 
-              href={liveUrl} 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <a
+              href={liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex-1"
               onClick={(e) => e.stopPropagation()}
             >
@@ -113,9 +149,9 @@ export function ProjectCard({
             </a>
           )}
 
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             className="gap-1 text-xs text-navy-DEFAULT hover:bg-navy-DEFAULT/10 shrink-0 px-3"
             onClick={(e) => {
               e.stopPropagation();
@@ -127,6 +163,6 @@ export function ProjectCard({
           </Button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

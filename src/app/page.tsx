@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-import { motion, Variants } from "framer-motion";
+import { motion, useScroll, useTransform, Variants } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/Button";
@@ -11,6 +11,8 @@ import { SkillBadge } from "@/components/ui/SkillBadge";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { ProjectModal, ProjectDetailData } from "@/components/ui/ProjectModal";
 import { ScrollToTop } from "@/components/ui/ScrollToTop";
+import { Counter } from "@/components/ui/Counter";
+import { SectionSpine } from "@/components/ui/SectionSpine";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { 
   ArrowRight, 
@@ -236,14 +238,25 @@ export default function Home() {
     setTimeout(() => setEmailCopied(false), 2000);
   }, []);
 
+  // 2.1 — Hero parallax: decorative layers only (blob + badge)
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: heroProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const blobY = useTransform(heroProgress, [0, 1], [0, 60]);
+  const badgeY = useTransform(heroProgress, [0, 1], [0, -40]);
+
+
   return (
     <>
       <Navbar />
 
       <main className="flex-grow pt-24 md:pt-32 pb-16 overflow-hidden">
-        {/* HERO SECTION - 100% UNTOUCHED & PRESERVED */}
-        <section id="hero" className="min-h-[85vh] flex items-center container mx-auto px-6 max-w-7xl relative">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-[#E5D9CE]/40 via-[#FAF7F2]/60 to-transparent rounded-full blur-3xl -z-10 pointer-events-none" />
+        {/* HERO SECTION */}
+        <section ref={heroRef} id="hero" className="min-h-[85vh] flex items-center container mx-auto px-6 max-w-7xl relative">
+          {/* 2.1 — Background blob: parallax layer, moves slower than foreground */}
+          <motion.div style={{ y: blobY }} className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-[#E5D9CE]/40 via-[#FAF7F2]/60 to-transparent rounded-full blur-3xl -z-10 pointer-events-none" />
 
           <div className="w-full grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             <motion.div 
@@ -307,14 +320,21 @@ export default function Home() {
 
               <motion.div variants={fadeUp} className="pt-6 grid grid-cols-3 gap-6 border-t border-border/60 max-w-lg">
                 <div>
-                  <div className="text-2xl lg:text-3xl font-bold text-navy-DEFAULT tracking-tight">8.45</div>
+                  {/* 1.3 — Animated counter: 0 → 8.45 on mount */}
+                  <div className="text-2xl lg:text-3xl font-bold text-navy-DEFAULT tracking-tight">
+                    <Counter to={8.45} decimals={2} />
+                  </div>
                   <div className="text-xs font-mono text-muted mt-1 uppercase tracking-wider">BSc IT CGPA</div>
                 </div>
                 <div>
-                  <div className="text-2xl lg:text-3xl font-bold text-navy-DEFAULT tracking-tight">6+</div>
+                  {/* 1.3 — Animated counter: 0 → 6+ on mount */}
+                  <div className="text-2xl lg:text-3xl font-bold text-navy-DEFAULT tracking-tight">
+                    <Counter to={6} suffix="+" />
+                  </div>
                   <div className="text-xs font-mono text-muted mt-1 uppercase tracking-wider">Featured Apps</div>
                 </div>
                 <div>
+                  {/* Text label — untouched, not a number */}
                   <div className="text-2xl lg:text-3xl font-bold text-navy-DEFAULT tracking-tight">Groq/Gemini</div>
                   <div className="text-xs font-mono text-muted mt-1 uppercase tracking-wider">AI Pipelines</div>
                 </div>
@@ -340,7 +360,23 @@ export default function Home() {
                   <div className="absolute inset-0 bg-gradient-to-t from-navy-DEFAULT/15 via-transparent to-transparent pointer-events-none" />
                 </div>
 
-                <div className="absolute -bottom-4 right-6 bg-white/95 backdrop-blur-md border border-sand-DEFAULT px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-3">
+                {/* 2.1 — Floating badge: parallax, desktop-only (moves up faster than portrait) */}
+                <div className="hidden lg:block">
+                  <motion.div
+                    style={{ y: badgeY }}
+                    className="absolute -bottom-4 right-6 bg-white/95 backdrop-blur-md border border-sand-DEFAULT px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-3"
+                  >
+                    <div className="w-8 h-8 rounded-xl bg-navy-DEFAULT/10 flex items-center justify-center text-navy-DEFAULT">
+                      <Sparkles size={16} />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-navy-DEFAULT">MSc IT Scholar</div>
+                      <div className="text-[10px] font-mono text-muted">MSU Baroda • 2025–2027</div>
+                    </div>
+                  </motion.div>
+                </div>
+                {/* Mobile: static badge (no parallax on touch) */}
+                <div className="lg:hidden absolute -bottom-4 right-6 bg-white/95 backdrop-blur-md border border-sand-DEFAULT px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-3">
                   <div className="w-8 h-8 rounded-xl bg-navy-DEFAULT/10 flex items-center justify-center text-navy-DEFAULT">
                     <Sparkles size={16} />
                   </div>
@@ -354,7 +390,11 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ABOUT & EDUCATION SECTION - PRESERVED */}
+        {/* 2.2 — Section spine wrapper: About → Projects. SectionSpine lives here, desktop xl: only */}
+        <div className="relative">
+          <SectionSpine />
+
+        {/* ABOUT & EDUCATION SECTION */}
         <section id="about" className="py-24 container mx-auto px-6 max-w-7xl">
           <motion.div
             initial="hidden"
@@ -598,6 +638,8 @@ export default function Home() {
             </motion.div>
           </div>
         </section>
+        {/* End of spine wrapper (About → Projects) */}
+        </div>
 
         {/* CERTIFICATIONS SECTION - PRESERVED */}
         <section className="py-24 container mx-auto px-6 max-w-7xl">

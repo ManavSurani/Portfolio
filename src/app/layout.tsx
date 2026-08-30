@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Geist_Mono } from "next/font/google";
 import { MotionConfig } from "framer-motion";
+import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -84,6 +85,8 @@ export default function RootLayout({
     <html lang="en" className="light" suppressHydrationWarning>
       <body suppressHydrationWarning className={`${spaceGrotesk.variable} ${geistMono.variable} min-h-screen flex flex-col bg-background text-foreground selection:bg-navy-DEFAULT/15 selection:text-navy-DEFAULT`}>
         <MotionConfig reducedMotion="user">
+          {/* 1.2 — Scroll progress bar: fixed top, z-[60], above navbar */}
+          <ScrollProgress />
           {children}
         </MotionConfig>
       </body>
