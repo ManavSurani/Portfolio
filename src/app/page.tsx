@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform, Variants } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValue, useSpring, Variants } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/Button";
@@ -11,6 +11,7 @@ import { SkillBadge } from "@/components/ui/SkillBadge";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { ProjectModal, ProjectDetailData } from "@/components/ui/ProjectModal";
 import { ScrollToTop } from "@/components/ui/ScrollToTop";
+import { MobileCTA } from "@/components/ui/MobileCTA";
 import { Counter } from "@/components/ui/Counter";
 import { SectionSpine } from "@/components/ui/SectionSpine";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
@@ -228,6 +229,29 @@ const internshipModalData: ProjectDetailData = {
   videoTitle: "VN Code Pro Internship - AI Blog Bot Pipeline Demonstration"
 };
 
+/**
+ * C3 — useMagnetic
+ * Subtle magnetic pull toward the cursor for the Hero's primary CTA only.
+ * strength: 0.25 — responsive, not chasing. One magnetic element site-wide.
+ * Never applied to secondary CTAs or any button outside the hero.
+ */
+function useMagnetic(strength = 0.25) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 150, damping: 15 });
+  const springY = useSpring(y, { stiffness: 150, damping: 15 });
+  const onMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    x.set((e.clientX - rect.left - rect.width / 2) * strength);
+    y.set((e.clientY - rect.top - rect.height / 2) * strength);
+  };
+  const onMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+  return { style: { x: springX, y: springY }, onMouseMove, onMouseLeave };
+}
+
 export default function Home() {
   const [selectedProject, setSelectedProject] = useState<ProjectDetailData | null>(null);
   const [emailCopied, setEmailCopied] = useState(false);
@@ -247,18 +271,47 @@ export default function Home() {
   const blobY = useTransform(heroProgress, [0, 1], [0, 60]);
   const badgeY = useTransform(heroProgress, [0, 1], [0, -40]);
 
+  // B3 — Hero ambient cursor glow (desktop only, 6% opacity — felt, not seen)
+  const glowX = useMotionValue(50);
+  const glowY = useMotionValue(50);
+  const glowBackground = useTransform(
+    [glowX, glowY],
+    ([x, y]: number[]) =>
+      `radial-gradient(600px circle at ${x}% ${y}%, rgba(27,42,74,0.06), transparent 70%)`
+  );
 
+  // C3 — Magnetic primary CTA (hero only, singular exception site-wide)
+  const magnetic = useMagnetic(0.25);
   return (
     <>
       <Navbar />
 
       <main className="flex-grow pt-24 md:pt-32 pb-16 overflow-hidden">
         {/* HERO SECTION */}
-        <section ref={heroRef} id="hero" className="min-h-[85vh] flex items-center container mx-auto px-6 max-w-7xl relative">
-          {/* 2.1 — Background blob: parallax layer, moves slower than foreground */}
+        <section
+          ref={heroRef}
+          id="hero"
+          className="min-h-[85vh] flex items-center container mx-auto px-6 max-w-7xl relative"
+          onMouseMove={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            glowX.set((e.clientX - rect.left) / rect.width * 100);
+            glowY.set((e.clientY - rect.top) / rect.height * 100);
+          }}
+          onMouseLeave={() => {
+            glowX.set(50);
+            glowY.set(50);
+          }}
+        >
+          {/* 2.1 — Background blob: parallax layer */}
           <motion.div style={{ y: blobY }} className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-[#E5D9CE]/40 via-[#FAF7F2]/60 to-transparent rounded-full blur-3xl -z-10 pointer-events-none" />
+          {/* B3 — Ambient cursor glow: desktop only, 6% navy opacity — felt, not seen */}
+          <motion.div
+            className="hidden lg:block absolute inset-0 pointer-events-none -z-10"
+            style={{ background: glowBackground }}
+          />
 
-          <div className="w-full grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+
+          <div className="w-full grid md:grid-cols-2 lg:grid-cols-12 gap-10 md:gap-8 lg:gap-8 items-center">
             <motion.div 
               className="lg:col-span-7 space-y-8"
               initial="hidden"
@@ -282,12 +335,13 @@ export default function Home() {
               </motion.div>
 
               <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-4 pt-2">
-                <a href="#projects">
+                {/* C3 — Magnetic: primary CTA only. Secondary CTA stays plain <a>. */}
+                <motion.a href="#projects" {...magnetic}>
                   <Button variant="primary" size="lg" className="gap-2 text-sm shadow-md">
                     <span>Explore Featured Projects</span>
                     <ArrowRight size={18} />
                   </Button>
-                </a>
+                </motion.a>
                 <a href="#contact">
                   <Button variant="outline" size="lg" className="gap-2 text-sm">
                     <Mail size={18} />
@@ -318,24 +372,24 @@ export default function Home() {
                 </div>
               </motion.div>
 
-              <motion.div variants={fadeUp} className="pt-6 grid grid-cols-3 gap-6 border-t border-border/60 max-w-lg">
+              <motion.div variants={fadeUp} className="pt-6 grid grid-cols-3 gap-3 sm:gap-6 border-t border-border/60 max-w-lg">
                 <div>
                   {/* 1.3 — Animated counter: 0 → 8.45 on mount */}
-                  <div className="text-2xl lg:text-3xl font-bold text-navy-DEFAULT tracking-tight">
+                  <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-navy-DEFAULT tracking-tight">
                     <Counter to={8.45} decimals={2} />
                   </div>
                   <div className="text-xs font-mono text-muted mt-1 uppercase tracking-wider">BSc IT CGPA</div>
                 </div>
                 <div>
                   {/* 1.3 — Animated counter: 0 → 6+ on mount */}
-                  <div className="text-2xl lg:text-3xl font-bold text-navy-DEFAULT tracking-tight">
+                  <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-navy-DEFAULT tracking-tight">
                     <Counter to={6} suffix="+" />
                   </div>
                   <div className="text-xs font-mono text-muted mt-1 uppercase tracking-wider">Featured Apps</div>
                 </div>
                 <div>
                   {/* Text label — untouched, not a number */}
-                  <div className="text-2xl lg:text-3xl font-bold text-navy-DEFAULT tracking-tight">Groq/Gemini</div>
+                  <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-navy-DEFAULT tracking-tight">Groq/Gemini</div>
                   <div className="text-xs font-mono text-muted mt-1 uppercase tracking-wider">AI Pipelines</div>
                 </div>
               </motion.div>
@@ -347,6 +401,12 @@ export default function Home() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             >
+              {/* C2 — Portrait clip-path circular reveal: starts after text stagger (delay 0.4s) */}
+              <motion.div
+                initial={{ clipPath: "circle(0% at 50% 40%)" }}
+                animate={{ clipPath: "circle(80% at 50% 40%)" }}
+                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+              >
               <div className="relative w-full max-w-[420px] aspect-[4/5] rounded-[32px] p-3 bg-white border border-sand-DEFAULT/90 shadow-[0_20px_50px_-10px_rgba(27,42,74,0.12)] group">
                 <div className="w-full h-full rounded-[24px] overflow-hidden bg-gradient-to-b from-[#EAE3DB] to-[#F6F3EE] relative">
                   <Image
@@ -386,6 +446,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+              </motion.div>{/* end C2 clip-path reveal */}
             </motion.div>
           </div>
         </section>
@@ -747,6 +808,8 @@ export default function Home() {
 
       {/* FLOATING SCROLL TO TOP */}
       <ScrollToTop />
+      {/* B1 — Mobile bottom CTA: appears after scrolling past Hero, md:hidden */}
+      <MobileCTA />
     </>
   );
 }

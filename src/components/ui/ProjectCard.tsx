@@ -68,8 +68,14 @@ export function ProjectCard({
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
       style={{ rotateX, rotateY, transformPerspective: 800 }}
+      whileHover={{
+        y: -5,
+        boxShadow: "0 20px 35px -10px rgba(27,42,74,0.08), 0 0 1px 1px rgba(27,42,74,0.05)",
+      }}
+      transition={{ type: "spring", stiffness: 300, damping: 25 }}
       className={cn(
-        "glass-card rounded-[24px] p-7 border border-border/80 flex flex-col justify-between h-full min-h-[400px] card-hover relative overflow-hidden group cursor-pointer",
+        // card-hover removed — lift+shadow now handled by whileHover above (same motion system as tilt)
+        "glass-card rounded-[24px] p-7 border border-border/80 flex flex-col justify-between h-full min-h-[400px] relative overflow-hidden group cursor-pointer",
         className
       )}
     >
