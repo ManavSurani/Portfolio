@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
 import { ArrowUpRight, Maximize2 } from "lucide-react";
@@ -20,9 +21,38 @@ interface ProjectCardProps {
 }
 
 /**
+ * useCanHover — bugfix pass
+ * Real hover-capability check via matchMedia, rather than assuming touch
+ * devices never fire `mousemove`. Many mobile browsers synthesize a single
+ * mousemove+click sequence after a tap for legacy compatibility, which
+ * would otherwise cause a one-frame tilt "snap" right before the modal
+ * opens. Also correctly allows hybrid devices (trackpad-equipped
+ * tablets/laptops) to get the effect, rather than a blanket touch check.
+ */
+function useCanHover() {
+  const [canHover, setCanHover] = useState(false);
+  useEffect(() => {
+    // Not a lazy useState initializer for the same reason as PageIntro:
+    // matchMedia is unavailable during SSR, and checking it immediately on
+    // the client's first render (rather than after mount) would make that
+    // first render's `style`/handler output disagree with the server-
+    // rendered markup — a hydration mismatch. Effect-gating keeps the
+    // server and first-client-render output identical (canHover=false),
+    // updating only after hydration completes.
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCanHover(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setCanHover(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  return canHover;
+}
+
+/**
  * 2.3 — useTiltHandlers
- * Cursor-driven 3D tilt effect. Desktop-only — onMouseMove only fires on
- * pointer devices, touch devices never trigger it.
+ * Cursor-driven 3D tilt effect. Gated to real hover-capable pointers by
+ * useCanHover() at the call site below, not by this hook itself.
  * Max tilt: ±4 degrees (premium subtlety, not a game UI).
  * useSpring smooths raw mouse values → fluid, not jittery.
  */
@@ -61,13 +91,14 @@ export function ProjectCard({
   onOpenModal,
 }: ProjectCardProps) {
   const { rotateX, rotateY, onMouseMove, onMouseLeave } = useTiltHandlers();
+  const canHover = useCanHover();
 
   return (
     <motion.div
       onClick={onOpenModal}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
-      style={{ rotateX, rotateY, transformPerspective: 800 }}
+      onMouseMove={canHover ? onMouseMove : undefined}
+      onMouseLeave={canHover ? onMouseLeave : undefined}
+      style={canHover ? { rotateX, rotateY, transformPerspective: 800 } : undefined}
       whileHover={{
         y: -5,
         boxShadow: "0 20px 35px -10px rgba(27,42,74,0.08), 0 0 1px 1px rgba(27,42,74,0.05)",

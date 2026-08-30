@@ -22,7 +22,7 @@ export function Counter({ to, decimals = 0, suffix = "" }: CounterProps) {
   useEffect(() => {
     const controls = animate(count, to, { duration: 1.2, ease: "easeOut" });
     return controls.stop;
-  }, [to]);
+  }, [to, count]);
 
   return <motion.span>{rounded}</motion.span>;
 }

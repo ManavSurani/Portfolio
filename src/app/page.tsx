@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useMotionValue, useSpring, Variants } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
@@ -21,7 +21,6 @@ import {
   Code2, 
   Sparkles, 
   GraduationCap, 
-  Briefcase, 
   Award, 
   ExternalLink, 
   ChevronRight,
@@ -330,7 +329,7 @@ export default function Home() {
                   Engineering Scalable Systems & <span className="text-gradient-navy">AI Intelligence.</span>
                 </h1>
                 <p className="text-lg sm:text-xl text-muted max-w-xl font-normal leading-relaxed">
-                  Hi, I'm <strong className="text-navy-DEFAULT font-semibold">Manav Surani</strong> — an MSc Information Technology scholar & Full-Stack Engineer specializing in Next.js, Python, and autonomous AI pipelines.
+                  Hi, I&apos;m <strong className="text-navy-DEFAULT font-semibold">Manav Surani</strong> — an MSc Information Technology scholar & Full-Stack Engineer specializing in Next.js, Python, and autonomous AI pipelines.
                 </p>
               </motion.div>
 
@@ -640,7 +639,7 @@ export default function Home() {
                 <ul className="space-y-4 text-muted text-sm sm:text-base leading-relaxed">
                   <li className="flex items-start gap-3">
                     <span className="w-2 h-2 rounded-full bg-navy-DEFAULT mt-2 shrink-0" />
-                    <span>Architected and deployed the <strong>"VN Code Pro Blog Bot,"</strong> an autonomous AI blog generation and publishing pipeline using Python and FastAPI.</span>
+                    <span>Architected and deployed the <strong>&quot;VN Code Pro Blog Bot,&quot;</strong> an autonomous AI blog generation and publishing pipeline using Python and FastAPI.</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-2 h-2 rounded-full bg-navy-DEFAULT mt-2 shrink-0" />
@@ -774,7 +773,7 @@ export default function Home() {
               </span>
 
               <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white">
-                Let's Build Something Extraordinary.
+                Let&apos;s Build Something Extraordinary.
               </h2>
               
               <p className="text-lg md:text-xl text-sand-DEFAULT/80 max-w-2xl mx-auto font-light leading-relaxed">

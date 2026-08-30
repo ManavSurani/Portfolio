@@ -22,7 +22,14 @@ export function PageIntro() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
+    // Deliberately not a lazy useState initializer: sessionStorage is a
+    // browser-only API. Reading it during the initial render would produce
+    // a different value on the server (always "unseen") than on the client
+    // (may already be "seen"), causing a hydration mismatch. Gating this in
+    // an effect guarantees the server-rendered markup and the first client
+    // render agree (show=false), and only updates after hydration completes.
     if (!sessionStorage.getItem("intro_seen")) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShow(true);
       sessionStorage.setItem("intro_seen", "1");
     }

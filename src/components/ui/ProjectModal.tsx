@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ExternalLink, Play, CheckCircle2, Cpu, Database, Layers, Code2 } from "lucide-react";
+import { X, ExternalLink, Play, CheckCircle2, Cpu, Code2 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { Button } from "./Button";
 import { SkillBadge } from "./SkillBadge";

@@ -26,7 +26,19 @@ Fix confirmed bugs (floating badge clipping, ScrollToTop vs MobileCTA collision 
    - Hovering over spine nodes on desktop reveals section title labels ("About", "Skills", "Experience", "Projects") via CSS transitions.
 
 6. **Phase B3 — MobileCTA Subtle First-Appearance Pulse (`src/components/ui/MobileCTA.tsx`)**:
-   - The mobile CTA button performs a single 0.4s scale pulse on initial appearance (`useRef` protected) to attract attention subtly.
+   - Upgraded `MobileCTA` pulse control to `useState` with `onAnimationComplete` handler on the button, guaranteeing reliable single-pulse playback.
+
+7. **Focus Trap & Accessibility Enhancements (`src/components/layout/Navbar.tsx`)**:
+   - Implemented panel focus trap (Tab / Shift+Tab cycling), Escape key handling, and outside pointerdown click listener.
+
+8. **Fine Pointer Gating for 3D Tilt (`src/components/ui/ProjectCard.tsx`)**:
+   - Added `useCanHover()` hook utilizing `window.matchMedia("(hover: hover) and (pointer: fine)")` to gate mousemove/3D tilt transforms strictly to true pointer devices.
+
+9. **ESLint & Dependency Array Cleanups**:
+   - Cleaned unescaped entities in `page.tsx` (`&apos;`, `&quot;`).
+   - Cleaned unused imports in `page.tsx` and `ProjectModal.tsx`.
+   - Updated `Counter.tsx` dependency array with `[to, count]`.
+   - Documented hydration safety in `PageIntro.tsx`.
 
 ### Verification
-- `npm run build` completed with code 0 (all static pages generated cleanly, zero TypeScript errors).
+- `npx tsc --noEmit; npm run build` completed with code 0 (all static pages generated cleanly, zero TypeScript errors).
