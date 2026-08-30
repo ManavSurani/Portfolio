@@ -10,13 +10,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "primary", size = "md", ...props }, ref) => {
     const variants = {
       primary:
-        "bg-navy-DEFAULT text-white border border-navy-dark hover:bg-navy-dark shadow-[0_4px_14px_0_rgba(27,42,74,0.25)] hover:shadow-[0_6px_20px_rgba(27,42,74,0.35)] hover:-translate-y-0.5 transition-all duration-300 font-medium",
+        "bg-navy-DEFAULT text-white border border-navy-dark hover:bg-navy-dark shadow-[0_4px_14px_0_rgba(27,42,74,0.25)] hover:shadow-[0_6px_20px_rgba(27,42,74,0.35)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] active:shadow-none active:duration-150 transition-all duration-300 font-medium",
       secondary:
-        "bg-steel-DEFAULT/10 text-navy-DEFAULT border border-steel-DEFAULT/20 hover:bg-steel-DEFAULT/20 hover:-translate-y-0.5 transition-all duration-300 font-medium",
+        "bg-steel-DEFAULT/10 text-navy-DEFAULT border border-steel-DEFAULT/20 hover:bg-steel-DEFAULT/20 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] active:shadow-none active:duration-150 transition-all duration-300 font-medium",
       outline:
-        "bg-transparent text-navy-DEFAULT border border-navy-DEFAULT/30 hover:bg-navy-DEFAULT/5 hover:border-navy-DEFAULT hover:-translate-y-0.5 transition-all duration-300 font-medium",
+        "bg-transparent text-navy-DEFAULT border border-navy-DEFAULT/30 hover:bg-navy-DEFAULT/5 hover:border-navy-DEFAULT hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] active:shadow-none active:duration-150 transition-all duration-300 font-medium",
       ghost:
-        "bg-transparent hover:bg-cream-hover text-foreground/80 hover:text-navy-DEFAULT transition-all duration-300 font-medium",
+        "bg-transparent hover:bg-cream-hover text-foreground/80 hover:text-navy-DEFAULT active:scale-[0.97] active:duration-150 transition-all duration-300 font-medium",
     };
 
     const sizes = {
@@ -29,7 +29,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-navy-DEFAULT/40",
+          "inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-navy-DEFAULT/40 ease-out",
           variants[variant],
           sizes[size],
           className

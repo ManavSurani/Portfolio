@@ -45,6 +45,16 @@ const staggerContainer: Variants = {
   },
 };
 
+const badgeStagger: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.03 } },
+};
+
+const badgeFadeUp: Variants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.25, ease: "easeOut" } },
+};
+
 // Rich Project Data for Modals
 const projectsData: (ProjectDetailData & { id: string; shortDesc: string; image: string; tags: string[]; liveUrl?: string; githubUrl: string; videoUrl?: string })[] = [
   {
@@ -424,11 +434,13 @@ export default function Home() {
                     <Code2 size={20} className="text-navy-DEFAULT" />
                     <h3 className="text-lg font-bold text-navy-DEFAULT">Languages</h3>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {["Python", "TypeScript", "JavaScript", "C#", "C++", "Java", "PHP"].map(skill => (
-                      <SkillBadge key={skill} name={skill} variant="navy" />
+                  <motion.div variants={badgeStagger} className="flex flex-wrap gap-2">
+                    {["Python", "TypeScript", "JavaScript", "C#", "C++", "Java", "PHP"].map((skill) => (
+                      <motion.div key={skill} variants={badgeFadeUp}>
+                        <SkillBadge name={skill} variant="navy" />
+                      </motion.div>
                     ))}
-                  </div>
+                  </motion.div>
                 </motion.div>
 
                 <motion.div variants={fadeUp} className="glass-card p-7 rounded-[24px]">
@@ -436,11 +448,13 @@ export default function Home() {
                     <Layers size={20} className="text-navy-DEFAULT" />
                     <h3 className="text-lg font-bold text-navy-DEFAULT">Frameworks</h3>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {["Next.js 14", "React", "FastAPI", "ASP.NET", ".NET (WinForms)", "Tailwind CSS"].map(skill => (
-                      <SkillBadge key={skill} name={skill} variant="steel" />
+                  <motion.div variants={badgeStagger} className="flex flex-wrap gap-2">
+                    {["Next.js 14", "React", "FastAPI", "ASP.NET", ".NET (WinForms)", "Tailwind CSS"].map((skill) => (
+                      <motion.div key={skill} variants={badgeFadeUp}>
+                        <SkillBadge name={skill} variant="steel" />
+                      </motion.div>
                     ))}
-                  </div>
+                  </motion.div>
                 </motion.div>
 
                 <motion.div variants={fadeUp} className="glass-card p-7 rounded-[24px]">
@@ -448,11 +462,13 @@ export default function Home() {
                     <Database size={20} className="text-navy-DEFAULT" />
                     <h3 className="text-lg font-bold text-navy-DEFAULT">Databases</h3>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {["PostgreSQL", "SQL Server", "MySQL", "Supabase", "Prisma ORM"].map(skill => (
-                      <SkillBadge key={skill} name={skill} variant="navy" />
+                  <motion.div variants={badgeStagger} className="flex flex-wrap gap-2">
+                    {["PostgreSQL", "SQL Server", "MySQL", "Supabase", "Prisma ORM"].map((skill) => (
+                      <motion.div key={skill} variants={badgeFadeUp}>
+                        <SkillBadge name={skill} variant="navy" />
+                      </motion.div>
                     ))}
-                  </div>
+                  </motion.div>
                 </motion.div>
 
                 <motion.div variants={fadeUp} className="glass-card p-7 rounded-[24px]">
@@ -460,11 +476,13 @@ export default function Home() {
                     <Cpu size={20} className="text-navy-DEFAULT" />
                     <h3 className="text-lg font-bold text-navy-DEFAULT">AI & DevTools</h3>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {["Google Gemini API", "Groq (Llama 70B)", "Tavily AI", "Git/GitHub", "Vercel", "PyInstaller"].map(skill => (
-                      <SkillBadge key={skill} name={skill} variant="steel" />
+                  <motion.div variants={badgeStagger} className="flex flex-wrap gap-2">
+                    {["Google Gemini API", "Groq (Llama 70B)", "Tavily AI", "Git/GitHub", "Vercel", "PyInstaller"].map((skill) => (
+                      <motion.div key={skill} variants={badgeFadeUp}>
+                        <SkillBadge name={skill} variant="steel" />
+                      </motion.div>
                     ))}
-                  </div>
+                  </motion.div>
                 </motion.div>
               </div>
             </motion.div>
