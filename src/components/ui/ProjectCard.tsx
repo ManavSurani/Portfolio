@@ -29,7 +29,7 @@ interface ProjectCardProps {
  * opens. Also correctly allows hybrid devices (trackpad-equipped
  * tablets/laptops) to get the effect, rather than a blanket touch check.
  */
-function useCanHover() {
+export function useCanHover() {
   const [canHover, setCanHover] = useState(false);
   useEffect(() => {
     // Not a lazy useState initializer for the same reason as PageIntro:
@@ -53,17 +53,17 @@ function useCanHover() {
  * 2.3 — useTiltHandlers
  * Cursor-driven 3D tilt effect. Gated to real hover-capable pointers by
  * useCanHover() at the call site below, not by this hook itself.
- * Max tilt: ±4 degrees (premium subtlety, not a game UI).
+ * Max tilt: ±4 degrees on cards, ±3 degrees on flagship panel.
  * useSpring smooths raw mouse values → fluid, not jittery.
  */
-function useTiltHandlers() {
+export function useTiltHandlers(maxAngle: number = 4) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [4, -4]), {
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [maxAngle, -maxAngle]), {
     stiffness: 150,
     damping: 15,
   });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-4, 4]), {
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-maxAngle, maxAngle]), {
     stiffness: 150,
     damping: 15,
   });

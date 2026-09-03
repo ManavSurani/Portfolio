@@ -66,3 +66,84 @@ Add Google Drive Certificate link to the "Software Engineering Intern — VN Cod
 
 ### Verification
 - `npx tsc --noEmit; npm run build` completed with code 0 (zero TypeScript errors, clean static generation).
+
+---
+
+## Session: Flagship Project Treatment — PNP CRM Showcase (2026-09-03)
+
+### User Request
+Implement the complete Flagship Project Treatment specification for PNP CRM:
+- Separate PNP CRM from the standard project cards grid into a full-width flagship banner.
+- Build cinematic clip-path unveil for `/images/pnp_crm_demo.webm` with visibility-driven auto-play/pause.
+- Add fine-pointer gated 3D tilt (max ±3°) on media panel.
+- Orchestrate content sequence: "✦ Flagship Project" eyebrow → title → description → animated 75% stat counter with honest Before/After comparison bars → micro-staggered tags → action CTAs (Source Code + View Case Study).
+- Add static 1-shot ambient radial glow backdrop.
+- Ensure the remaining 5 projects render in the standard grid.
+
+### What Was Done
+1. **Shared 3D Tilt Hook (`src/components/ui/ProjectCard.tsx`)**:
+   - Exported `useCanHover` and `useTiltHandlers` with configurable `maxAngle` parameter (default 4° for cards, 3° for flagship).
+
+2. **Created Flagship Project Component (`src/components/ui/FlagshipProject.tsx`)**:
+   - Built full-width responsive showcase container (video leads on mobile, 2-column on `lg:`+).
+   - Added cinematic clip-path unveil (`0.9s`, ease `[0.16, 1, 0.3, 1]`) for the video.
+   - Connected `useInView` to video `ref` to auto-play when in viewport and pause when scrolled out of view to preserve battery and CPU.
+   - Implemented `flagshipStagger` sequence (`0.15s`) for content elements.
+   - Integrated `<Counter to={75} suffix="%" />` with truthful Before (100%) and After (25%) comparative bars delayed by 0.3s.
+   - Added static, 1-shot ambient radial glow backdrop (zero infinite loops).
+   - Strict CTA compliance: no magnetic effect on flagship buttons.
+
+3. **Integrated into Main Page (`src/app/page.tsx`)**:
+   - Partitioned `flagshipProject` and `remainingProjects` (5 cards).
+   - Rendered `<FlagshipProject />` right below `SectionHeading` in `#projects`.
+   - Rendered `remainingProjects` in the standard grid below.
+
+### Verification
+- `npx tsc --noEmit; npm run build` completed with code 0 (all 4 static pages generated cleanly, zero TypeScript errors).
+- Dev server running on `http://localhost:3054`.
+
+---
+
+## Session: Signature Scroll Sequence — Horizontal Pin, Curved Spine & Line-by-Line Stagger (2026-09-03)
+
+### User Request
+Implement the complete Signature Scroll Sequence specification:
+- Experience section: line-by-line bullet reveal via nested `staggerContainer`.
+- About section: internal staggered reveal (SectionHeading → P1 → P2 → MSc card → BSc card).
+- Projects section: horizontal pin-scroll sequence for desktop (`xl:`+) tuned for the 5 remaining projects with `250vh` sticky wrapper.
+- Spine track: migrate straight div line to SVG `<path>` with a 14px S-curve kink spanning 80px right at the Projects boundary, drawn with scroll-linked `pathLength`.
+- Ensure mobile/tablet under 1280px (`xl:hidden`) continues rendering the standard responsive grid.
+
+### What Was Done
+1. **About Section Internal Stagger (`src/app/page.tsx`)**:
+   - Swapped outer About container animation to `variants={staggerContainer}`.
+   - Wrapped `SectionHeading`, heading icon, paragraph 1, paragraph 2, MSc card, and BSc card in individual `motion.div variants={fadeUp}` blocks for natural sequential entrance.
+
+2. **Experience Line-by-Line Bullet Reveal (`src/app/page.tsx`)**:
+   - Swapped `#experience` section animation to `staggerContainer`.
+   - Preserved card shell with `motion.div variants={fadeUp}` (header row, VN badge, Details button enter as first unit).
+   - Wrapped bullet list in `motion.ul variants={staggerContainer}` and each of the 4 `<li>` items in `motion.li variants={fadeUp}`.
+   - Left tags row and certificate link in the card footer inheriting trigger automatically.
+
+3. **Desktop Horizontal Pin-Scroll (`src/components/ui/ProjectsHorizontalScroll.tsx`)**:
+   - Created desktop-only component (`hidden xl:block relative`, `height: "250vh"`).
+   - Sticky viewport pins on screen while `useScroll` drives `x` transform on the row of cards (`w-[420px] shrink-0`, `gap-8`).
+   - Calibrated end transform (`-110vw`) specifically for 5 cards to eliminate trailing dead scroll space.
+   - Retained card 3D tilt and modal triggers (`onOpenModal`).
+
+4. **SectionSpine S-Curve SVG Migration (`src/components/ui/SectionSpine.tsx`)**:
+   - Added wrapper height measurement (`setTotalHeight(wrapperHeight)`).
+   - Generated cubic Bezier `pathD` with `curveSpan = 80` and `bulge = 14` positioned at `nodeOffsets["projects"]`.
+   - Converted spine line to SVG `<path>` with `overflow-visible`.
+   - Replaced `scaleY` with scroll-linked `pathLength: scrollYProgress` for smooth, undistorted curve drawing.
+   - Section indicator dots and hover tooltips retain their exact positions and transition logic.
+
+5. **Responsive Coordination in Projects Section (`src/app/page.tsx`)**:
+   - Full-width Flagship banner (PNP CRM) rendered above at all breakpoints.
+   - `xl:hidden`: Standard responsive grid displaying the 5 remaining cards.
+   - `hidden xl:block`: `<ProjectsHorizontalScroll />` running the pinned horizontal sequence.
+
+### Verification
+- `npm run build`: Compiled cleanly in 7.1s with 0 errors (all 4 static routes generated in 674ms).
+- `npm run lint`: Exited with code 0 (zero lint warnings or errors).
+- Dev server running live on `http://localhost:3054`.

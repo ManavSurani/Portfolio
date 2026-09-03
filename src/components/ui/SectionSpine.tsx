@@ -38,15 +38,19 @@ export function SectionSpine() {
   });
 
   const [nodeOffsets, setNodeOffsets] = useState<Record<string, number>>({});
+  const [totalHeight, setTotalHeight] = useState(0);
   const [activeSection, setActiveSection] = useState("");
 
-  // Compute node positions once on mount (relative to spine wrapper top)
+  // Compute node positions & wrapper height once on mount (relative to spine wrapper top)
   useEffect(() => {
     const wrapper = spineRef.current;
     if (!wrapper) return;
 
     const computeOffsets = () => {
       const wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
+      const wrapperHeight = wrapper.getBoundingClientRect().height;
+      setTotalHeight(wrapperHeight);
+
       const offsets: Record<string, number> = {};
       SPINE_SECTIONS.forEach((id) => {
         const el = document.getElementById(id);
@@ -94,24 +98,57 @@ export function SectionSpine() {
     return () => observer.disconnect();
   }, []);
 
+  // S-Curve geometry calculation at Projects boundary
+  const curveCenter = nodeOffsets["projects"] ?? 0;
+  const curveSpan = 80; // total vertical height the S-curve occupies
+  const bulge = 14;     // how far right the curve deviates, in px
+
+  const pathD =
+    curveCenter > 0 && totalHeight > 0
+      ? `M 1.5 0 L 1.5 ${Math.max(0, curveCenter - curveSpan / 2)} C ${1.5 + bulge} ${curveCenter - curveSpan / 4}, ${1.5 + bulge} ${curveCenter + curveSpan / 4}, 1.5 ${curveCenter + curveSpan / 2} L 1.5 ${totalHeight}`
+      : `M 1.5 0 L 1.5 ${totalHeight || 1000}`;
+
   return (
     <div
       ref={spineRef}
-      className="hidden xl:block absolute left-16 top-0 bottom-0 w-[3px] bg-sand-DEFAULT/60 pointer-events-none rounded-full"
+      className="hidden xl:block absolute left-16 top-0 bottom-0 pointer-events-none"
     >
-      {/* Scroll-fill line */}
-      <motion.div
-        style={{ scaleY: scrollYProgress, transformOrigin: "top" }}
-        className="w-full h-full bg-navy-DEFAULT rounded-full"
-      />
+      {/* SVG S-curve line (Part 3) */}
+      {totalHeight > 0 && (
+        <svg
+          className="absolute left-0 top-0 z-10 pointer-events-none overflow-visible"
+          width="3"
+          height={totalHeight}
+          viewBox={`0 0 3 ${totalHeight}`}
+        >
+          {/* Track (replaces the old sand-colored div) */}
+          <path
+            d={pathD}
+            stroke="var(--color-sand-DEFAULT)"
+            strokeOpacity={0.6}
+            strokeWidth={3}
+            strokeLinecap="round"
+            fill="none"
+          />
+          {/* Scroll-linked fill (pathLength handles curve natively) */}
+          <motion.path
+            d={pathD}
+            stroke="var(--color-navy-DEFAULT)"
+            strokeWidth={3}
+            strokeLinecap="round"
+            fill="none"
+            style={{ pathLength: scrollYProgress }}
+          />
+        </svg>
+      )}
 
       {/* C4 / B2 — Section progress nodes & hover tooltips */}
       {SPINE_SECTIONS.map((id) =>
         nodeOffsets[id] !== undefined ? (
           <div
             key={id}
-            className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
-            style={{ top: nodeOffsets[id] }}
+            className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
+            style={{ left: "1.5px", top: nodeOffsets[id] }}
           >
             <div className="group relative flex items-center justify-center p-1 cursor-default">
               <motion.div

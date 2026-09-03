@@ -10,6 +10,8 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { SkillBadge } from "@/components/ui/SkillBadge";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { ProjectModal, ProjectDetailData } from "@/components/ui/ProjectModal";
+import { FlagshipProject } from "@/components/ui/FlagshipProject";
+import { ProjectsHorizontalScroll } from "@/components/ui/ProjectsHorizontalScroll";
 import { ScrollToTop } from "@/components/ui/ScrollToTop";
 import { MobileCTA } from "@/components/ui/MobileCTA";
 import { Counter } from "@/components/ui/Counter";
@@ -204,6 +206,10 @@ const projectsData: (ProjectDetailData & { id: string; shortDesc: string; image:
     builtYear: "2024"
   }
 ];
+
+// Flagship project partition (PNP CRM showcase + 5 remaining grid projects)
+const flagshipProject = projectsData.find((p) => p.id === "pnp-crm")!;
+const remainingProjects = projectsData.filter((p) => p.id !== "pnp-crm");
 
 // Internship Detail Data for Modal
 const internshipModalData: ProjectDetailData = {
@@ -468,32 +474,36 @@ export default function Home() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            variants={fadeUp}
+            variants={staggerContainer}
           >
-            <SectionHeading 
-              badge="Background & Education"
-              title="Architecting Scalable Engineering Solutions" 
-              subtitle="Driven Information Technology graduate student passionate about full-stack web architectures, desktop systems, and production AI integrations."
-            />
+            <motion.div variants={fadeUp}>
+              <SectionHeading 
+                badge="Background & Education"
+                title="Architecting Scalable Engineering Solutions" 
+                subtitle="Driven Information Technology graduate student passionate about full-stack web architectures, desktop systems, and production AI integrations."
+              />
+            </motion.div>
             
             <div className="grid md:grid-cols-12 gap-8 mt-12">
-              <div className="md:col-span-7 glass-card p-8 md:p-10 rounded-[28px] flex flex-col justify-between">
+              <motion.div variants={fadeUp} className="md:col-span-7 glass-card p-8 md:p-10 rounded-[28px] flex flex-col justify-between">
                 <div className="space-y-6">
-                  <div className="w-12 h-12 rounded-2xl bg-navy-DEFAULT/10 flex items-center justify-center text-navy-DEFAULT mb-2">
+                  <motion.div variants={fadeUp} className="w-12 h-12 rounded-2xl bg-navy-DEFAULT/10 flex items-center justify-center text-navy-DEFAULT mb-2">
                     <Code2 size={24} />
-                  </div>
-                  <h3 className="text-2xl font-bold text-navy-DEFAULT tracking-tight">Engineering Mindset & Full-Stack Core</h3>
-                  <p className="text-muted leading-relaxed text-base font-normal">
+                  </motion.div>
+                  <motion.h3 variants={fadeUp} className="text-2xl font-bold text-navy-DEFAULT tracking-tight">
+                    Engineering Mindset & Full-Stack Core
+                  </motion.h3>
+                  <motion.p variants={fadeUp} className="text-muted leading-relaxed text-base font-normal">
                     I build end-to-end digital applications with robust databases, high-performance APIs, and intuitive frontends. My expertise spans modern frameworks like <strong className="text-navy-DEFAULT font-semibold">Next.js & React</strong>, Python backend systems with <strong className="text-navy-DEFAULT font-semibold">FastAPI</strong>, and enterprise desktop solutions using <strong className="text-navy-DEFAULT font-semibold">.NET & C#</strong>.
-                  </p>
-                  <p className="text-muted leading-relaxed text-base font-normal">
+                  </motion.p>
+                  <motion.p variants={fadeUp} className="text-muted leading-relaxed text-base font-normal">
                     During my recent internship, I engineered autonomous AI content pipelines utilizing Groq (Llama 70B) and Gemini models with Tavily web-search verification, managing API key rotation and automated database syncs.
-                  </p>
+                  </motion.p>
                 </div>
-              </div>
+              </motion.div>
 
               <div className="md:col-span-5 space-y-6">
-                <div className="glass-card p-7 rounded-[24px] border-l-4 border-l-navy-DEFAULT">
+                <motion.div variants={fadeUp} className="glass-card p-7 rounded-[24px] border-l-4 border-l-navy-DEFAULT">
                   <div className="flex items-center gap-3 text-navy-DEFAULT mb-3">
                     <GraduationCap size={22} />
                     <span className="text-xs font-mono font-bold uppercase tracking-wider text-steel-DEFAULT">Postgraduate Degree</span>
@@ -503,9 +513,9 @@ export default function Home() {
                   <p className="text-muted text-sm leading-relaxed">
                     Currently in 2nd Year (3rd Sem). Advanced coursework in Mobile Computing, High-Performance Databases, and Enterprise Software Systems.
                   </p>
-                </div>
+                </motion.div>
 
-                <div className="glass-card p-7 rounded-[24px] border-l-4 border-l-steel-DEFAULT">
+                <motion.div variants={fadeUp} className="glass-card p-7 rounded-[24px] border-l-4 border-l-steel-DEFAULT">
                   <div className="flex items-center gap-3 text-steel-DEFAULT mb-3">
                     <GraduationCap size={22} />
                     <span className="text-xs font-mono font-bold uppercase tracking-wider text-steel-DEFAULT">Undergraduate Degree</span>
@@ -515,7 +525,7 @@ export default function Home() {
                   <p className="text-muted text-sm leading-relaxed">
                     Graduated with a distinction score of <strong className="text-navy-DEFAULT font-semibold">8.45 CGPA</strong>. Built core foundations in Software Architecture and System Analysis.
                   </p>
-                </div>
+                </motion.div>
               </div>
             </div>
           </motion.div>
@@ -603,16 +613,19 @@ export default function Home() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            variants={fadeUp}
+            variants={staggerContainer}
           >
-            <SectionHeading 
-              badge="Industry Experience"
-              title="Professional Work & Internships" 
-              subtitle="Practical software engineering experience delivering production autonomous pipelines and enterprise tools."
-            />
+            <motion.div variants={fadeUp}>
+              <SectionHeading 
+                badge="Industry Experience"
+                title="Professional Work & Internships" 
+                subtitle="Practical software engineering experience delivering production autonomous pipelines and enterprise tools."
+              />
+            </motion.div>
 
             <div className="mt-12 max-w-4xl mx-auto">
-              <div 
+              <motion.div 
+                variants={fadeUp}
                 onClick={() => setSelectedProject(internshipModalData)}
                 className="glass-card p-8 sm:p-10 rounded-[28px] border border-sand-DEFAULT shadow-md relative overflow-hidden card-hover cursor-pointer group"
               >
@@ -637,24 +650,24 @@ export default function Home() {
                   </div>
                 </div>
 
-                <ul className="space-y-4 text-muted text-sm sm:text-base leading-relaxed">
-                  <li className="flex items-start gap-3">
+                <motion.ul variants={staggerContainer} className="space-y-4 text-muted text-sm sm:text-base leading-relaxed">
+                  <motion.li variants={fadeUp} className="flex items-start gap-3">
                     <span className="w-2 h-2 rounded-full bg-navy-DEFAULT mt-2 shrink-0" />
                     <span>Architected and deployed the <strong>&quot;VN Code Pro Blog Bot,&quot;</strong> an autonomous AI blog generation and publishing pipeline using Python and FastAPI.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
+                  </motion.li>
+                  <motion.li variants={fadeUp} className="flex items-start gap-3">
                     <span className="w-2 h-2 rounded-full bg-navy-DEFAULT mt-2 shrink-0" />
                     <span>Orchestrated <strong>Groq (Llama 70B)</strong> and <strong>Google Gemini 2.5 Flash</strong> for real-time article synthesis, integrating Tavily API for live web fact-checking.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
+                  </motion.li>
+                  <motion.li variants={fadeUp} className="flex items-start gap-3">
                     <span className="w-2 h-2 rounded-full bg-navy-DEFAULT mt-2 shrink-0" />
                     <span>Engineered a robust multi-key API key rotation system with exponential backoff to handle rate limits seamlessly.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
+                  </motion.li>
+                  <motion.li variants={fadeUp} className="flex items-start gap-3">
                     <span className="w-2 h-2 rounded-full bg-navy-DEFAULT mt-2 shrink-0" />
                     <span>Connected backend outputs directly to Supabase and custom CMS endpoints for automated scheduled publishing.</span>
-                  </li>
-                </ul>
+                  </motion.li>
+                </motion.ul>
 
                 <div className="mt-8 pt-6 border-t border-border/40">
                   <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
@@ -680,7 +693,7 @@ export default function Home() {
                     <ExternalLink size={11} />
                   </a>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </motion.div>
         </section>
@@ -700,9 +713,17 @@ export default function Home() {
                 subtitle="Selected web applications, AI tools, and desktop software built with un-compromised attention to detail. Click any card for detailed architecture."
               />
 
-              {/* Grid of cards with FIXED EQUAL HEIGHTS & UNIFORM ACTION BUTTONS */}
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-                {projectsData.map((project) => (
+              {/* Part 0 & 1: Flagship Project Banner — PNP CRM (full-width, all breakpoints) */}
+              <div className="mt-12">
+                <FlagshipProject
+                  project={flagshipProject}
+                  onOpenModal={() => setSelectedProject(flagshipProject)}
+                />
+              </div>
+
+              {/* Below xl: Standard responsive grid fallback for remaining 5 projects */}
+              <div className="xl:hidden grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {remainingProjects.map((project) => (
                   <motion.div key={project.id} variants={fadeUp} className="h-full">
                     <ProjectCard
                       title={project.title}
@@ -718,6 +739,14 @@ export default function Home() {
                 ))}
               </div>
             </motion.div>
+          </div>
+
+          {/* At xl:+: Desktop-only horizontal pin-scroll sequence for remaining 5 projects */}
+          <div className="hidden xl:block">
+            <ProjectsHorizontalScroll
+              projects={remainingProjects}
+              onOpenModal={(project) => setSelectedProject(project)}
+            />
           </div>
         </section>
         {/* End of spine wrapper (About → Projects) */}
