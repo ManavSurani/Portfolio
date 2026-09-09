@@ -62,7 +62,7 @@ export function ProjectsHorizontalScroll({
         </div>
 
         {/* Panning cards track */}
-        <motion.div style={{ x }} className="flex gap-8 mt-6 pl-[4vw] will-change-transform">
+        <motion.div style={{ x }} className="flex gap-8 mt-6 pl-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] will-change-transform">
           {projects.map((project) => (
             <div key={project.id} className="w-[420px] shrink-0">
               <ProjectCard

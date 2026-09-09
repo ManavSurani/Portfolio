@@ -147,3 +147,47 @@ Implement the complete Signature Scroll Sequence specification:
 - `npm run build`: Compiled cleanly in 7.1s with 0 errors (all 4 static routes generated in 674ms).
 - `npm run lint`: Exited with code 0 (zero lint warnings or errors).
 - Dev server running live on `http://localhost:3054`.
+
+---
+
+## 🔒 Standing Design Rules — Projects Section (2026-09-03)
+
+These rules were established after a design review comparing the portfolio's horizontal card pan against the gsap.com cover-panel scroll pattern. They govern all future work on the Projects section.
+
+### Rule P1 — No Horizontal Card Pan in Projects
+The `ProjectsHorizontalScroll` pattern (panning 420px-wide cards left with a sticky `250vh` wrapper) is **deprecated**. It shall not be rebuilt, restored, or used in any other section. The confirmed reasons:
+- Cards at fixed `420px` width read as a shopping list, not a showcase.
+- Horizontal pan on vertical scroll is unintuitive and disorienting.
+- No immersion — the page background bleeds through.
+
+### Rule P2 — Projects Remaining (5 Cards) Must Use Cover-Panel Stack
+The 5 remaining projects (`Finteam FaaS`, `Furnish & Florish`, `Print-any-folder`, `VN Code Pro Blog Bot`, `Furniture Management System`) must be displayed using a **full-screen sticky cover-panel stack** — the same mechanic used on gsap.com:
+- Each project panel = `100vw × 100vh` (full viewport).
+- Panels stack in z-axis. Scrolling reveals each new panel by sliding it up over the previous one.
+- Panel height and layout make each project feel like its own world, not a repeating template.
+- The scroll mechanic is `position: sticky; top: 0; height: 100vh` on each panel inside a `500vh` wrapper.
+- `framer-motion` `useScroll` + `useTransform` drives `y` and `scale` transitions — no GSAP, no new dependencies.
+
+### Rule P3 — Cover Panel Layout Template
+Each cover panel must follow this two-column layout on desktop (`lg:`+):
+- **Left column (50%):** Category eyebrow badge → Large project title (`text-5xl lg:text-6xl`) → Description → Technology badge row → Action CTAs (`Source Code` + `View Case Study`) → Panel index counter (`01 / 05` in `font-mono text-muted`).
+- **Right column (50%):** Project image/media, large format, edge-to-edge with gradient overlay toward the left for text legibility.
+- Mobile: single column, image above content.
+
+### Rule P4 — Cover Panels Use the Existing Design Palette
+No new colors, fonts, or shadow tokens. Cover panels use:
+- `bg-cream-card/95` or `bg-white` for panel backgrounds (subtle variation between panels is allowed).
+- `text-navy-DEFAULT` for titles, `text-muted` for descriptions.
+- `border-l-4 border-l-navy-DEFAULT` for left accent — from the existing education card pattern.
+- `Button` component `variant="outline"` and `variant="primary"` for CTAs — unchanged.
+- Transition ease: always `[0.16, 1, 0.3, 1]` (signature curve).
+
+### Rule P5 — Flagship PNP CRM is Exempt From the Panel Stack
+`FlagshipProject.tsx` (the PNP CRM full-width showcase with video, counter, and before/after bars) is **not** part of the cover-panel stack. It renders above the stack at all breakpoints, unchanged. The 5-panel stack begins immediately below it.
+
+### Rule P6 — Mobile Fallback Is the Responsive Grid
+Below `xl:` (1280px), the cover-panel stack does **not** render. The `xl:hidden` fallback must remain the standard responsive grid (`md:grid-cols-2 lg:grid-cols-3`) — exactly as it exists today. Do not replace the mobile fallback with touch-swipe carousels or any other pattern without a separate user-approved plan.
+
+### Rule P7 — Reduced Motion Compliance
+The cover-panel stack must degrade gracefully under `prefers-reduced-motion`. With `MotionConfig reducedMotion="user"` already wrapping the root layout, `y` panel transitions must collapse to `opacity`-only fades at most — no large spatial movement for users who've requested reduced motion.
+
