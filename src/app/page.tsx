@@ -10,8 +10,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { SkillBadge } from "@/components/ui/SkillBadge";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { ProjectModal, ProjectDetailData } from "@/components/ui/ProjectModal";
-import { FlagshipProject } from "@/components/ui/FlagshipProject";
-import { ProjectsHorizontalScroll } from "@/components/ui/ProjectsHorizontalScroll";
+
 import { ScrollToTop } from "@/components/ui/ScrollToTop";
 import { MobileCTA } from "@/components/ui/MobileCTA";
 import { Counter } from "@/components/ui/Counter";
@@ -207,9 +206,6 @@ const projectsData: (ProjectDetailData & { id: string; shortDesc: string; image:
   }
 ];
 
-// Flagship project partition (PNP CRM showcase + 5 remaining grid projects)
-const flagshipProject = projectsData.find((p) => p.id === "pnp-crm")!;
-const remainingProjects = projectsData.filter((p) => p.id !== "pnp-crm");
 
 // Internship Detail Data for Modal
 const internshipModalData: ProjectDetailData = {
@@ -707,23 +703,15 @@ export default function Home() {
               viewport={{ once: true, margin: "-100px" }}
               variants={staggerContainer}
             >
-              <SectionHeading 
+              <SectionHeading
                 badge="Portfolio Showcase"
-                title="Featured Software Projects" 
+                title="Featured Software Projects"
                 subtitle="Selected web applications, AI tools, and desktop software built with un-compromised attention to detail. Click any card for detailed architecture."
               />
 
-              {/* Part 0 & 1: Flagship Project Banner — PNP CRM (full-width, all breakpoints) */}
-              <div className="mt-12">
-                <FlagshipProject
-                  project={flagshipProject}
-                  onOpenModal={() => setSelectedProject(flagshipProject)}
-                />
-              </div>
-
-              {/* Below xl: Standard responsive grid fallback for remaining 5 projects */}
-              <div className="xl:hidden grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {remainingProjects.map((project) => (
+              {/* All 6 projects — uniform responsive grid */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                {projectsData.map((project) => (
                   <motion.div key={project.id} variants={fadeUp} className="h-full">
                     <ProjectCard
                       title={project.title}
@@ -740,17 +728,10 @@ export default function Home() {
               </div>
             </motion.div>
           </div>
-
-          {/* At xl:+: Desktop-only horizontal pin-scroll sequence for remaining 5 projects */}
-          <div className="hidden xl:block">
-            <ProjectsHorizontalScroll
-              projects={remainingProjects}
-              onOpenModal={(project) => setSelectedProject(project)}
-            />
-          </div>
         </section>
         {/* End of spine wrapper (About → Projects) */}
         </div>
+
 
         {/* CERTIFICATIONS SECTION - PRESERVED */}
         <section className="py-24 container mx-auto px-6 max-w-7xl">
