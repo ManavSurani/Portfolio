@@ -213,4 +213,26 @@ The cover-panel stack must degrade gracefully under `prefers-reduced-motion`. Wi
 - Phase 2: Remove redundant `relative` class from `<section id="skills">` in `page.tsx` for consistent `position: static` section containers.
 - Phase 3: Run TypeScript, lint, and build verification gates.
 
+---
+
+## Session: Hero Spacing Below CGPA & Background Shadow Animation Fix (2026-09-14)
+
+### User Request
+1. Fix lack of space below the CGPA stats row in the Hero section.
+2. Remove the dark/black shadow animation in the background that does not look correct.
+
+### What Was Diagnosed
+1. **Lack of Space Below CGPA:**
+   - `<section id="hero">` had `min-h-[85vh] flex items-center` with zero bottom padding (`pb-0`).
+   - With the addition of "Download Resume" in the buttons row, the stats row was pushed down against the bottom edge of the Hero section.
+   - The About dot on SectionSpine starts at `top: 0` immediately below Hero, giving almost zero breathing room.
+2. **Black Shadow Animation in Background:**
+   - The ambient cursor glow (`glowBackground`) used `rgba(27,42,74,0.06)` in a 600px radial gradient following mouse movement. On a light cream background (`#F6F3EE`), this produced moving dark grey/black smoky smudges.
+
+### Planned Resolution
+- Phase 1: Remove the dark ambient cursor glow animation (`glowBackground`, `glowX`, `glowY`, `onMouseMove`, `onMouseLeave`) from `page.tsx`.
+- Phase 2: Add responsive bottom padding (`pb-20 md:pb-28 lg:pb-32`) to `<section id="hero">` for generous breathing room below the stats counter.
+- Phase 3: Run validation suite (`tsc`, `lint`, `build`).
+
+
 
