@@ -234,5 +234,18 @@ The cover-panel stack must degrade gracefully under `prefers-reduced-motion`. Wi
 - Phase 2: Add responsive bottom padding (`pb-20 md:pb-28 lg:pb-32`) to `<section id="hero">` for generous breathing room below the stats counter.
 - Phase 3: Run validation suite (`tsc`, `lint`, `build`).
 
+---
+
+## Session: Restore Moving Dark Background Shadow in Hero (2026-09-14)
+
+### User Request
+Do not remove the Moving Dark Background Shadow. Keep the effect active while preserving the spacing below the CGPA row. Create a detailed phased plan.
+
+### Planned Resolution
+- Phase 1: Reintroduce `glowX`, `glowY`, and `glowBackground` radial-gradient transform in `src/app/page.tsx`.
+- Phase 2: Wire cursor listeners (`onMouseMove`, `onMouseLeave`) to `<section id="hero">` while keeping `pb-20 md:pb-28 lg:pb-32` bottom padding, and re-render the ambient glow motion div.
+- Phase 3: Run validation suite (`tsc`, `lint`, `build`).
+
+
 
 

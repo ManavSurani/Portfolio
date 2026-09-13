@@ -275,6 +275,15 @@ export default function Home() {
   const blobY = useTransform(heroProgress, [0, 1], [0, 60]);
   const badgeY = useTransform(heroProgress, [0, 1], [0, -40]);
 
+  // B3 — Hero ambient cursor glow (desktop only, 6% opacity — felt, not seen)
+  const glowX = useMotionValue(50);
+  const glowY = useMotionValue(50);
+  const glowBackground = useTransform(
+    [glowX, glowY],
+    ([x, y]: number[]) =>
+      `radial-gradient(600px circle at ${x}% ${y}%, rgba(27,42,74,0.06), transparent 70%)`
+  );
+
   // C3 — Magnetic primary CTA (hero only, singular exception site-wide)
   const magnetic = useMagnetic(0.25);
   return (
@@ -287,9 +296,23 @@ export default function Home() {
           ref={heroRef}
           id="hero"
           className="min-h-[85vh] flex items-center container mx-auto px-6 max-w-7xl relative pb-20 md:pb-28 lg:pb-32"
+          onMouseMove={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            glowX.set(((e.clientX - rect.left) / rect.width) * 100);
+            glowY.set(((e.clientY - rect.top) / rect.height) * 100);
+          }}
+          onMouseLeave={() => {
+            glowX.set(50);
+            glowY.set(50);
+          }}
         >
           {/* 2.1 — Background blob: parallax layer */}
           <motion.div style={{ y: blobY }} className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-[#E5D9CE]/40 via-[#FAF7F2]/60 to-transparent rounded-full blur-3xl -z-10 pointer-events-none" />
+          {/* B3 — Ambient cursor glow: desktop only, 6% navy opacity — felt, not seen */}
+          <motion.div
+            className="hidden lg:block absolute inset-0 pointer-events-none -z-10"
+            style={{ background: glowBackground }}
+          />
 
 
           <div className="w-full grid md:grid-cols-2 lg:grid-cols-12 gap-10 md:gap-8 lg:gap-8 items-center">
