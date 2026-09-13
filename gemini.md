@@ -191,3 +191,26 @@ Below `xl:` (1280px), the cover-panel stack does **not** render. The `xl:hidden`
 ### Rule P7 — Reduced Motion Compliance
 The cover-panel stack must degrade gracefully under `prefers-reduced-motion`. With `MotionConfig reducedMotion="user"` already wrapping the root layout, `y` panel transitions must collapse to `opacity`-only fades at most — no large spatial movement for users who've requested reduced motion.
 
+---
+
+## Session: SectionSpine Straightening & Dot Layering Alignment (2026-09-14)
+
+### User Request
+1. Straighten the SectionSpine line by removing the S-curve bump.
+2. Add resume download capability using `C:\Document\Manav_Surani_Resume.pdf`.
+3. In Technology Stack & Tooling and Professional Work & Internships sections, the SectionSpine dot is partially hidden/sunken under the container background (Images 1 & 2); make them fully visible on top of the container backgrounds exactly like Featured Projects (Image 3).
+
+### What Was Diagnosed
+- In `<section id="skills">`, `className="... relative"` combined with `bg-cream-card/60` caused the skills container to paint over earlier positioned DOM elements without an explicit `z-index`.
+- `SectionSpine.tsx` root container and dot nodes had `position: absolute` with no explicit `z-index` (`z-index: auto`).
+- As a result:
+  - At the top of Skills: the bottom half of the Skills dot was submerged under the Skills container background.
+  - At the bottom of Skills: the top half of the Experience dot was submerged under the Skills container background.
+  - In Featured Projects: the section is `position: static` without `relative`, so the `absolute` spine naturally rendered above it.
+
+### Planned Resolution
+- Phase 1: Elevate `SectionSpine.tsx` root container to `z-20`, dot nodes to `z-20`, and hover tooltips to `z-30`.
+- Phase 2: Remove redundant `relative` class from `<section id="skills">` in `page.tsx` for consistent `position: static` section containers.
+- Phase 3: Run TypeScript, lint, and build verification gates.
+
+

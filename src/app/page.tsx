@@ -539,7 +539,7 @@ export default function Home() {
         </section>
 
         {/* TECHNICAL ARSENAL SECTION - PRESERVED */}
-        <section id="skills" className="py-24 bg-cream-card/60 border-y border-border/60 relative">
+        <section id="skills" className="py-24 bg-cream-card/60 border-y border-border/60">
           <div className="container mx-auto px-6 max-w-7xl">
             <motion.div
               initial="hidden"

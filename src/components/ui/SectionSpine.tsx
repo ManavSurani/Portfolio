@@ -104,7 +104,7 @@ export function SectionSpine() {
   return (
     <div
       ref={spineRef}
-      className="hidden xl:block absolute left-16 top-0 bottom-0 pointer-events-none"
+      className="hidden xl:block absolute left-16 top-0 bottom-0 pointer-events-none z-20"
     >
       {/* SVG S-curve line (Part 3) */}
       {totalHeight > 0 && (
@@ -140,7 +140,7 @@ export function SectionSpine() {
         nodeOffsets[id] !== undefined ? (
           <div
             key={id}
-            className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
+            className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-auto z-20"
             style={{ left: "1.5px", top: nodeOffsets[id] }}
           >
             <div className="group relative flex items-center justify-center p-1 cursor-default">
@@ -157,7 +157,7 @@ export function SectionSpine() {
               />
 
               {/* B2 — Tooltip label on hover */}
-              <span className="absolute left-6 top-1/2 -translate-y-1/2 whitespace-nowrap text-[11px] font-mono font-semibold text-navy-DEFAULT bg-white/95 border border-sand-DEFAULT px-2.5 py-1 rounded-md shadow-sm pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+              <span className="absolute left-6 top-1/2 -translate-y-1/2 whitespace-nowrap text-[11px] font-mono font-semibold text-navy-DEFAULT bg-white/95 border border-sand-DEFAULT px-2.5 py-1 rounded-md shadow-sm pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-30">
                 {SECTION_LABELS[id]}
               </span>
             </div>
