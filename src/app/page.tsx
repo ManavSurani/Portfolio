@@ -18,7 +18,9 @@ import { SectionSpine } from "@/components/ui/SectionSpine";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { 
   ArrowRight, 
-  Mail, 
+  Mail,
+  Download,
+
   Code2, 
   Sparkles, 
   GraduationCap, 
@@ -348,6 +350,15 @@ export default function Home() {
                   <Button variant="outline" size="lg" className="gap-2 text-sm">
                     <Mail size={18} />
                     <span>Get in Touch</span>
+                  </Button>
+                </a>
+                <a
+                  href="/Manav_Surani_Resume.pdf"
+                  download="Manav_Surani_Resume.pdf"
+                >
+                  <Button variant="outline" size="lg" className="gap-2 text-sm">
+                    <Download size={18} />
+                    <span>Download Resume</span>
                   </Button>
                 </a>
                 <div className="flex items-center gap-2">

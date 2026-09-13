@@ -98,15 +98,8 @@ export function SectionSpine() {
     return () => observer.disconnect();
   }, []);
 
-  // S-Curve geometry calculation at Projects boundary
-  const curveCenter = nodeOffsets["projects"] ?? 0;
-  const curveSpan = 80; // total vertical height the S-curve occupies
-  const bulge = 14;     // how far right the curve deviates, in px
+  const pathD = `M 1.5 0 L 1.5 ${totalHeight || 1000}`;
 
-  const pathD =
-    curveCenter > 0 && totalHeight > 0
-      ? `M 1.5 0 L 1.5 ${Math.max(0, curveCenter - curveSpan / 2)} C ${1.5 + bulge} ${curveCenter - curveSpan / 4}, ${1.5 + bulge} ${curveCenter + curveSpan / 4}, 1.5 ${curveCenter + curveSpan / 2} L 1.5 ${totalHeight}`
-      : `M 1.5 0 L 1.5 ${totalHeight || 1000}`;
 
   return (
     <div
